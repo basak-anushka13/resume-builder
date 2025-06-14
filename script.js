@@ -217,3 +217,12 @@ const skills = Array.from(skillInputs)
   localStorage.setItem("resumeData", JSON.stringify(data));
   window.location.href = "preview.html";
 }
+document.addEventListener("DOMContentLoaded", function () {
+  const generateBtn = document.getElementById("generateBtn");
+  if (generateBtn) {
+    generateBtn.addEventListener("click", async function (event) {
+      event.preventDefault();
+      await generateResume();
+    });
+  }
+});

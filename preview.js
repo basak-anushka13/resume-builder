@@ -7,9 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
 document.getElementById("location").textContent = data.location || "";
 document.getElementById("description").textContent = data.description || "";
 if (data.profilePic) {
-  const pic = document.getElementById("profile-pic");
-  pic.src = data.profilePic;
-  pic.style.display = "inline-block";
+  document.getElementById("profile-picture").src = data.profilePic;
+  document.getElementById("profile-picture").style.display = "block";
 }
 
 // Email

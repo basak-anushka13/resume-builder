@@ -43,29 +43,13 @@
         </div>
         <button type="button" onclick="addEducation()">+ Add More Education</button>
       </div>
-
-      <div class="form-section" id="skills-section">
-        <h3>Skills</h3>
-        <div id="skill-tags" class="skill-tags-container"></div>
-        <input type="text" id="skill-input" placeholder="Type skills and press comma..." list="skills-list">
-      </div>
-
-      <datalist id="skills-list">
-        <option value="HTML">
-        <option value="CSS">
-        <option value="JavaScript">
-        <option value="Python">
-        <option value="Java">
-        <option value="C++">
-        <option value="React">
-        <option value="Node.js">
-        <option value="Git">
-          <option value="AWS">
-            <option value="OOP">
-        <option value="Teamwork">
-        <option value="Communication">
-      </datalist>
-
+<div class="form-section" id="skills-section">
+  <h3>Skills</h3>
+  <div class="skills-entry">
+    <input type="text" name="skills[]" placeholder="Skill">
+  </div>
+  <button type="button" onclick="addSkill()">+ Add More Skills</button>
+</div>
       <div class="form-section" id="projects-section">
         <h3>Projects</h3>
         <div class="project-entry">

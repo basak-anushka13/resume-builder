@@ -69,7 +69,14 @@ document.addEventListener("DOMContentLoaded", () => {
   if (data.profilePic) {
     const img = document.createElement("img");
     img.src = data.profilePic;
-    img.style.cssText = "position: absolute; top: 40px; right: 60px; width: 100px; height: 100px; border-radius: 50%; object-fit: cover;";
+  img.style.cssText = `
+  float: right;
+  margin: 0 0 10px 20px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+`;
     document.querySelector(".resume").appendChild(img);
   }
 });

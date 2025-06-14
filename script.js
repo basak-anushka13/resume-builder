@@ -7,20 +7,20 @@ function readFileAsDataURL(file) {
   });
 }
 
-// Helper function to get safe input values
+// Helper to safely get input values
 function safeValue(selector) {
   const el = document.querySelector(selector);
   return el ? el.value : "";
 }
 
-// Store skills in an array
 let allSkills = [];
 
+// Prevent form from submitting normally
 document.getElementById("resume-form").addEventListener("submit", function (e) {
   e.preventDefault();
 });
 
-// Skill input handlers
+// Handle skill tags
 document.getElementById('skill-input').addEventListener('keydown', function (e) {
   if (e.key === ',' || e.key === 'Enter') {
     e.preventDefault();
@@ -48,6 +48,7 @@ function removeSkill(index) {
   allSkills.splice(index, 1);
   displaySkills();
 }
+
 function previewProfilePic(input) {
   const file = input.files[0];
   const preview = document.getElementById("profilePicPreview");
@@ -65,20 +66,18 @@ function previewProfilePic(input) {
   }
 }
 
-// Dynamic section adders
+// Dynamic Section Adders (without file inputs)
 function addEducation() {
   const section = document.getElementById('education-section');
   const entry = document.createElement('div');
   entry.classList.add('education-entry');
   entry.innerHTML = `
-  <input type="text" name="degree[]" placeholder="Degree / Course Name">
-  <input type="text" name="institution[]" placeholder="Institution Name">
-  <input type="text" name="year[]" placeholder="Year of Passing">
-  <input type="text" name="marks[]" placeholder="Marks / GPA">
-  <label>Upload Marksheet / Certificate (PDF, PNG, JPG):</label>
-  <input type="file" name="educationMedia[]" accept=".pdf,.jpg,.jpeg,.png">
-  <hr>
-`;
+    <input type="text" name="degree[]" placeholder="Degree / Course Name">
+    <input type="text" name="institution[]" placeholder="Institution Name">
+    <input type="text" name="year[]" placeholder="Year of Passing">
+    <input type="text" name="marks[]" placeholder="Marks / GPA">
+    <hr>
+  `;
   section.insertBefore(entry, section.lastElementChild);
 }
 
@@ -90,8 +89,6 @@ function addProject() {
     <input type="text" name="project_name[]" placeholder="Project Name">
     <textarea name="project_desc[]" placeholder="Short Description"></textarea>
     <input type="url" name="project_link[]" placeholder="Project Link (optional)">
-    <label>Upload PDF/PNG/JPG:</label>
-    <input type="file" name="project_file[]" accept=".pdf,.jpg,.jpeg,.png">
   `;
   section.insertBefore(entry, section.lastElementChild);
 }
@@ -104,8 +101,6 @@ function addCertificate() {
     <input type="text" name="certificate_title[]" placeholder="Certificate Title">
     <input type="text" name="certificate_org[]" placeholder="Issuing Organization">
     <input type="month" name="certificate_date[]">
-    <label>Upload Certificate (PDF, PNG, JPG):</label>
-    <input type="file" name="certificate_file[]" accept=".pdf,.jpg,.jpeg,.png">
   `;
   section.insertBefore(entry, section.lastElementChild);
 }
@@ -119,18 +114,17 @@ function addExperience() {
     <input type="text" name="company[]" placeholder="Company Name">
     <input type="text" name="duration[]" placeholder="Duration (e.g., Jan 2022 - Dec 2023)">
     <textarea name="job_description[]" placeholder="Job Description" rows="3"></textarea>
-    <label>Upload Proof (PDF, PNG, JPG):</label>
-    <input type="file" name="experience_file[]" accept=".pdf,.jpg,.jpeg,.png" onchange="previewFile(this)">
-    <div class="file-preview"></div>
   `;
   section.insertBefore(entry, section.lastElementChild);
 }
+
+// Main resume generation
 document.addEventListener("DOMContentLoaded", function () {
   const generateBtn = document.getElementById("generateBtn");
   if (generateBtn) {
     generateBtn.addEventListener("click", async function (event) {
       event.preventDefault();
-      await generateResume(); // ✅ await if it's an async function
+      await generateResume();
     });
   }
 });
@@ -166,12 +160,11 @@ async function generateResume() {
     description: entry.querySelector('[name="job_description[]"]')?.value || ""
   }));
 
-  // ✅ Load profile picture
   let profilePic = "";
-const picInput = document.getElementById("profilePic");
-if (picInput?.files?.[0]) {
-  profilePic = await readFileAsDataURL(picInput.files[0]);
-}
+  const picInput = document.getElementById("profilePic");
+  if (picInput?.files?.[0]) {
+    profilePic = await readFileAsDataURL(picInput.files[0]);
+  }
 
   const data = {
     name: safeValue('#name'),
@@ -188,41 +181,7 @@ if (picInput?.files?.[0]) {
     experience,
     profilePic
   };
-localStorage.setItem("resumeData", JSON.stringify(data));
-window.location.href = "preview.html";
 
-}
-
-function previewFile(input) {
-  const previewContainer = input.nextElementSibling;
-  previewContainer.innerHTML = '';
-
-  const file = input.files[0];
-  if (!file) return;
-
-  const fileType = file.type;
-
-  if (fileType.startsWith('image/')) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const img = document.createElement('img');
-      img.src = e.target.result;
-      img.style.maxWidth = '150px';
-      img.style.marginTop = '10px';
-      previewContainer.appendChild(img);
-    };
-    reader.readAsDataURL(file);
-
-  } else if (fileType === 'application/pdf') {
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(file);
-    link.target = '_blank';
-    link.textContent = `📄 View PDF: ${file.name}`;
-    link.style.display = 'block';
-    link.style.marginTop = '10px';
-    previewContainer.appendChild(link);
-
-  } else {
-    previewContainer.textContent = 'Unsupported file type.';
-  }
+  localStorage.setItem("resumeData", JSON.stringify(data));
+  window.location.href = "preview.html";
 }

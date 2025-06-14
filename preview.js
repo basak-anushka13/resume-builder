@@ -66,39 +66,45 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Profile Pic
-  if (data.profilePic) {
-    const img = document.createElement("img");
-    img.src = data.profilePic;
-  const topWrapper = document.createElement("div");
-topWrapper.style.cssText = `
+ // Rebuild the top header with name, location, and profile picture
+const resume = document.querySelector(".resume");
+const header = document.createElement("div");
+header.style.cssText = `
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
+  margin-bottom: 20px;
 `;
 
-const nameBlock = document.createElement("div");
-nameBlock.innerHTML = `
-  <h1 id="name">${data.name}</h1>
-  <div id="location" class="contact" style="color:#555; font-size:14px;">${data.location}</div>
+const left = document.createElement("div");
+left.innerHTML = `
+  <h1 style="margin: 0;">${data.name}</h1>
+  <div class="contact" style="color:#555; font-size:14px; margin-top: 4px;">${data.location || ""}</div>
 `;
 
-img.style.cssText = `
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-left: 20px;
-`;
+header.appendChild(left);
 
-topWrapper.appendChild(nameBlock);
-topWrapper.appendChild(img);
+// If profile picture exists, show it
+if (data.profilePic) {
+  const img = document.createElement("img");
+  img.src = data.profilePic;
+  img.style.cssText = `
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 20px;
+  `;
+  header.appendChild(img);
+}
 
-// Insert at the very top of resume
-const resume = document.querySelector(".resume");
-resume.insertBefore(topWrapper, resume.firstChild);
+// Replace existing name + location block (optional)
+const oldName = document.getElementById("name");
+if (oldName) oldName.parentElement.removeChild(oldName);
 
-    document.querySelector(".resume").appendChild(img);
-  }
+// Insert the new header at the top
+resume.insertBefore(header, resume.firstChild);
+
 });
 
 // ✅ Final working PDF generator

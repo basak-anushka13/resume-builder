@@ -171,7 +171,7 @@ const skills = Array.from(skillInputs).map(input => input.value.trim()).filter(B
     linkedin: safeValue('#linkedin'),
     portfolio: safeValue('#portfolio'),
     description: safeValue('#description'),
-    skills: allSkills,
+    skills,
     education,
     projects,
     certificates,

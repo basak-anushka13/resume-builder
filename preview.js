@@ -24,20 +24,20 @@ document.addEventListener("DOMContentLoaded", () => {
     <div style="color:#555; font-size:14px;">${data.location || ""}</div>
   `;
   header.appendChild(left);
-
-  if (data.profilePic) {
-    const img = document.createElement("img");
-    img.src = data.profilePic;
-    img.alt = "Profile Picture";
-    img.style.cssText = `
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-left: 20px;
-    `;
-    header.appendChild(img);
-  }
+if (data.profilePic) {
+  const img = document.createElement("img");
+  img.setAttribute("crossorigin", "anonymous");  // ✅ fix for mobile PDF issue
+  img.src = data.profilePic;
+  img.alt = "Profile Picture";
+  img.style.cssText = `
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 20px;
+  `;
+  header.appendChild(img);
+}
 
   resumeContent.prepend(header);
 

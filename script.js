@@ -169,6 +169,10 @@ async function generateResume() {
     year: entry.querySelector('[name="year[]"]')?.value || "",
     marks: entry.querySelector('[name="marks[]"]')?.value || ""
   }));
+const skillInputs = document.querySelectorAll('input[name="skills[]"]');
+const skills = Array.from(skillInputs)
+  .map(input => input.value.trim())
+  .filter(skill => skill !== "");
 
   const projectEntries = document.querySelectorAll(".project-entry");
   const projects = Array.from(projectEntries).map(entry => ({
@@ -202,7 +206,7 @@ async function generateResume() {
     linkedin: safeValue('#linkedin'),
     portfolio: safeValue('#portfolio'),
     description: safeValue('#description'),
-    skills: allSkills,
+    skills,
     education,
     projects,
     certificates,

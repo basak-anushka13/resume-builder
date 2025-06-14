@@ -98,13 +98,49 @@ if (data.profilePic) {
 }
 
 // Replace existing name + location block (optional)
+const resumeContent = document.getElementById("resume-content");
+
+// Remove default #name element if it exists
 const oldName = document.getElementById("name");
-if (oldName) oldName.parentElement.removeChild(oldName);
+if (oldName && oldName.parentElement) {
+  oldName.parentElement.removeChild(oldName);
+}
 
-// Insert the new header at the top
-resume.insertBefore(header, resume.firstChild);
+// Create a new top header div
+const header = document.createElement("div");
+header.style.cssText = `
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+`;
 
-});
+// Left: Name and Location
+const left = document.createElement("div");
+left.innerHTML = `
+  <h1 style="margin: 0;">${data.name}</h1>
+  <div class="contact" style="color:#555; font-size:14px; margin-top: 4px;">${data.location || ""}</div>
+`;
+header.appendChild(left);
+
+// Right: Profile Picture (if exists)
+if (data.profilePic) {
+  const img = document.createElement("img");
+  img.src = data.profilePic;
+  img.alt = "Profile Picture";
+  img.style.cssText = `
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 20px;
+  `;
+  header.appendChild(img);
+}
+
+// Insert at the very top of resume content
+resumeContent.insertBefore(header, resumeContent.firstChild);
 
 // ✅ Final working PDF generator
 function downloadPDF() {

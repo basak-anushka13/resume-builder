@@ -168,10 +168,10 @@ async function generateResume() {
 
   // ✅ Load profile picture
   let profilePic = "";
-  const picInput = document.getElementById("profilePic");
-  if (picInput?.files?.[0]) {
-    profilePic = await readFileAsDataURL(picInput.files[0]);
-  }
+const picInput = document.getElementById("profilePic");
+if (picInput?.files?.[0]) {
+  profilePic = await readFileAsDataURL(picInput.files[0]);
+}
 
   const data = {
     name: safeValue('#name'),

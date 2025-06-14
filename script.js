@@ -44,22 +44,54 @@ function removeSkill(index) {
   allSkills.splice(index, 1);
   displaySkills();
 }
-
 function previewProfilePic(input) {
   const file = input.files[0];
   const preview = document.getElementById("profilePicPreview");
 
-  if (file && file.type.startsWith("image/")) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      preview.src = e.target.result;
-      preview.style.display = "block";
-    };
-    reader.readAsDataURL(file);
-  } else {
+  if (!file || !file.type.startsWith("image/")) {
     preview.src = "";
     preview.style.display = "none";
+    return;
   }
+
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const img = new Image();
+    img.onload = function () {
+      // Resize to max 200x200
+      const canvas = document.createElement("canvas");
+      const maxSize = 200;
+      let width = img.width;
+      let height = img.height;
+
+      if (width > height) {
+        if (width > maxSize) {
+          height *= maxSize / width;
+          width = maxSize;
+        }
+      } else {
+        if (height > maxSize) {
+          width *= maxSize / height;
+          height = maxSize;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+
+      const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.85); // ✅ good quality
+
+      preview.src = compressedDataUrl;
+      preview.style.display = "block";
+
+      // Store the compressed version globally for preview.js
+      window.compressedProfilePic = compressedDataUrl;
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
 }
 
 // Dynamic Section Adders (without file inputs)
@@ -159,9 +191,9 @@ const skills = Array.from(skillInputs).map(input => input.value.trim()).filter(B
 
   let profilePic = "";
   const picInput = document.getElementById("profilePic");
-  if (picInput?.files?.[0]) {
-    profilePic = await readFileAsDataURL(picInput.files[0]);
-  }
+ if (window.compressedProfilePic) {
+  profilePic = window.compressedProfilePic;
+}
 
   const data = {
     name: safeValue('#name'),

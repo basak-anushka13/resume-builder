@@ -5,113 +5,100 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Digital Resume Builder</title>
   <link rel="stylesheet" href="style.css" />
-  <!-- Add this in <head> -->
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="logo-container">
-  <img src="eleve-logo.png" alt="Élevé Logo" class="logo-img">
-</div>
+  <div class="logo-container">
+    <img src="eleve-logo.png" alt="Élevé Logo" class="logo-img">
+  </div>
+
   <div class="container">
     <div class="branding">
-  <h1 class="brand-name">Elev&#769;e</h1>
-  <p class="tagline">Your personal digital resume builder</p>
-</div>
+      <h1 class="brand-name">Elev&#769;e</h1>
+      <p class="tagline">Your personal digital resume builder</p>
+    </div>
+
     <form id="resume-form">
       <input type="text" placeholder="Full Name" id="name" required />
-<label for="profilePic">Upload Profile Picture (JPG/PNG):</label>
-<input type="file" id="profilePic" accept="image/png, image/jpeg" onchange="previewProfilePic(this)" />
-<br>
-<img id="profilePicPreview" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 2px solid #ccc; display: none; margin-top: 10px;" />
+
+      <label for="profilePic">Upload Profile Picture (JPG/PNG):</label>
+      <input type="file" id="profilePic" accept="image/png, image/jpeg" onchange="previewProfilePic(this)" />
+      <br>
+      <img id="profilePicPreview" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 2px solid #ccc; display: none; margin-top: 10px;" />
 
       <textarea placeholder="Short Description" id="description" rows="3"></textarea>
       <input type="text" id="location" placeholder="Location (City, Country)" />
-<input type="text" placeholder="LinkedIn URL" id="linkedin" />
+      <input type="text" placeholder="LinkedIn URL" id="linkedin" />
       <input type="email" placeholder="Email Address" id="email" required />
       <input type="text" placeholder="Phone Number" id="phone" />
-<input type="text" placeholder="Portfolio / Website URL" id="portfolio" />
-<div class="form-section" id="education-section">
-  <h3>Education</h3>
+      <input type="text" placeholder="Portfolio / Website URL" id="portfolio" />
 
-  <div class="education-entry">
-    <input type="text" name="degree[]" placeholder="Degree / Course Name">
-    <input type="text" name="institution[]" placeholder="Institution Name">
-    <input type="text" name="year[]" placeholder="Year of Passing">
-    <input type="text" name="marks[]" placeholder="Marks / GPA">
-    <label>Upload Marksheet / Certificate (PDF, PNG, JPG):</label>
-    <input type="file" name="education_file[]" accept=".pdf,.jpg,.jpeg,.png" onchange="previewFile(this)">
-<div class="file-preview"></div>    
-  </div>
+      <div class="form-section" id="education-section">
+        <h3>Education</h3>
+        <div class="education-entry">
+          <input type="text" name="degree[]" placeholder="Degree / Course Name">
+          <input type="text" name="institution[]" placeholder="Institution Name">
+          <input type="text" name="year[]" placeholder="Year of Passing">
+          <input type="text" name="marks[]" placeholder="Marks / GPA">
+        </div>
+        <button type="button" onclick="addEducation()">+ Add More Education</button>
+      </div>
 
-  <button type="button" onclick="addEducation()">+ Add More Education</button>
-</div>      
       <div class="form-section" id="skills-section">
-  <h3>Skills</h3>
-  <div id="skill-tags" class="skill-tags-container"></div>
-  <input type="text" id="skill-input" placeholder="Type skills and press comma..." list="skills-list">
-</div>
+        <h3>Skills</h3>
+        <div id="skill-tags" class="skill-tags-container"></div>
+        <input type="text" id="skill-input" placeholder="Type skills and press comma..." list="skills-list">
+      </div>
 
-<datalist id="skills-list">
-  <option value="HTML">
-  <option value="CSS">
-  <option value="JavaScript">
-  <option value="Python">
-  <option value="Java">
-  <option value="C++">
-  <option value="React">
-  <option value="Node.js">
-  <option value="Git">
-  <option value="Teamwork">
-  <option value="Communication">
-</datalist>
+      <datalist id="skills-list">
+        <option value="HTML">
+        <option value="CSS">
+        <option value="JavaScript">
+        <option value="Python">
+        <option value="Java">
+        <option value="C++">
+        <option value="React">
+        <option value="Node.js">
+        <option value="Git">
+        <option value="Teamwork">
+        <option value="Communication">
+      </datalist>
+
       <div class="form-section" id="projects-section">
-  <h3>Projects</h3>
+        <h3>Projects</h3>
+        <div class="project-entry">
+          <input type="text" name="project_name[]" placeholder="Project Name">
+          <textarea name="project_desc[]" placeholder="Short Description"></textarea>
+          <input type="url" name="project_link[]" placeholder="Project Link (optional)">
+        </div>
+        <button type="button" onclick="addProject()">+ Add More Projects</button>
+      </div>
 
-  <div class="project-entry">
-    <input type="text" name="project_name[]" placeholder="Project Name">
-    <textarea name="project_desc[]" placeholder="Short Description"></textarea>
-    <input type="url" name="project_link[]" placeholder="Project Link (optional)">
-    <label>Upload PDF/PNG/JPG:</label>
-    <input type="file" name="project_file[]" accept=".pdf,.jpg,.jpeg,.png" onchange="previewFile(this)">
-<div class="file-preview"></div>
-  </div>
+      <div class="form-section" id="certificates-section">
+        <h3>Certificates</h3>
+        <div class="certificate-entry">
+          <input type="text" name="certificate_title[]" placeholder="Certificate Title">
+          <input type="text" name="certificate_org[]" placeholder="Issuing Organization">
+          <input type="month" name="certificate_date[]">
+        </div>
+        <button type="button" onclick="addCertificate()">+ Add More Certificates</button>
+      </div>
 
-  <button type="button" onclick="addProject()">+ Add More Projects</button>
-</div>
-<div class="form-section" id="certificates-section">
-  <h3>Certificates</h3>
-
-  <div class="certificate-entry">
-    <input type="text" name="certificate_title[]" placeholder="Certificate Title">
-    <input type="text" name="certificate_org[]" placeholder="Issuing Organization">
-    <input type="month" name="certificate_date[]">
-    <label>Upload Certificate (PDF, PNG, JPG):</label>
-    <input type="file" name="project_file[]" accept=".pdf,.jpg,.jpeg,.png" onchange="previewFile(this)">
-<div class="file-preview"></div>
-  </div>
-
-  <button type="button" onclick="addCertificate()">+ Add More Certificates</button>
-</div>      
       <div class="form-section" id="experience-section">
-  <h3>Experience</h3>
+        <h3>Experience</h3>
+        <div class="experience-entry">
+          <input type="text" name="job_title[]" placeholder="Job Title">
+          <input type="text" name="company[]" placeholder="Company Name">
+          <input type="text" name="duration[]" placeholder="Duration (e.g., Jan 2022 - Dec 2023)">
+          <textarea name="job_description[]" placeholder="Job Description" rows="3"></textarea>
+        </div>
+        <button type="button" onclick="addExperience()">+ Add More Experience</button>
+      </div>
 
-  <div class="experience-entry">
-    <input type="text" name="job_title[]" placeholder="Job Title">
-    <input type="text" name="company[]" placeholder="Company Name">
-    <input type="text" name="duration[]" placeholder="Duration (e.g., Jan 2022 - Dec 2023)">
-    <textarea name="job_description[]" placeholder="Job Description" rows="3"></textarea>
-
-    <label>Upload Proof (PDF, PNG, JPG):</label>
-    <input type="file" name="experience_file[]" accept=".pdf,.jpg,.jpeg,.png" onchange="previewFile(this)">
-    <div class="file-preview"></div>
-  </div>
-
-  <button type="button" onclick="addExperience()">+ Add More Experience</button>
-</div>
-    <button id="generateBtn" type="button">Generate Resume</button> 
+      <button id="generateBtn" type="button">Generate Resume</button>
     </form>
   </div>
+
   <script src="script.js"></script>
-  
 </body>
 </html>

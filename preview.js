@@ -69,14 +69,34 @@ document.addEventListener("DOMContentLoaded", () => {
   if (data.profilePic) {
     const img = document.createElement("img");
     img.src = data.profilePic;
-  img.style.cssText = `
-  float: right;
-  margin: 0 0 10px 20px;
+  const topWrapper = document.createElement("div");
+topWrapper.style.cssText = `
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+`;
+
+const nameBlock = document.createElement("div");
+nameBlock.innerHTML = `
+  <h1 id="name">${data.name}</h1>
+  <div id="location" class="contact" style="color:#555; font-size:14px;">${data.location}</div>
+`;
+
+img.style.cssText = `
   width: 100px;
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
+  margin-left: 20px;
 `;
+
+topWrapper.appendChild(nameBlock);
+topWrapper.appendChild(img);
+
+// Insert at the very top of resume
+const resume = document.querySelector(".resume");
+resume.insertBefore(topWrapper, resume.firstChild);
+
     document.querySelector(".resume").appendChild(img);
   }
 });

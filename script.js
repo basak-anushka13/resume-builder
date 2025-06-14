@@ -21,17 +21,13 @@ document.getElementById("resume-form").addEventListener("submit", function (e) {
 });
 
 // Handle skill tags
-document.getElementById('skill-input').addEventListener('keydown', function (e) {
-  if (e.key === ',' || e.key === 'Enter') {
-    e.preventDefault();
-    const input = e.target.value.trim().replace(/,$/, '');
-    if (input && !allSkills.includes(input)) {
-      allSkills.push(input);
-      displaySkills();
-    }
-    e.target.value = '';
-  }
-});
+function addSkill() {
+  const section = document.getElementById('skills-section');
+  const entry = document.createElement('div');
+  entry.classList.add('skills-entry');
+  entry.innerHTML = `<input type="text" name="skills[]" placeholder="Skill">`;
+  section.insertBefore(entry, section.lastElementChild); // Before button
+}
 
 function displaySkills() {
   const container = document.getElementById('skill-tags');

@@ -2,14 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const data = JSON.parse(localStorage.getItem("resumeData"));
   if (!data) return;
 
+  // Rebuild header with name, location, and image
   const resume = document.querySelector(".resume");
-  const resumeContent = document.getElementById("resume-content");
-
-  // Clear name if already set to avoid duplication
-  const existingName = document.getElementById("name");
-  if (existingName) existingName.remove();
-
-  // Build top header with name, location, and profile pic
   const header = document.createElement("div");
   header.style.cssText = `
     display: flex;
@@ -20,97 +14,92 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const left = document.createElement("div");
   left.innerHTML = `
-    <h1 style="margin: 0;">${data.name || ""}</h1>
-    <div style="color:#555; font-size:14px;">${data.location || ""}</div>
+    <h1 style="margin: 0;">${data.name}</h1>
+    <div class="contact" style="color:#555; font-size:14px; margin-top: 4px;">
+      ${data.location || ""}
+    </div>
   `;
   header.appendChild(left);
-if (data.profilePic) {
-  const img = document.createElement("img");
-  img.setAttribute("crossorigin", "anonymous");  // ✅ fix for mobile PDF issue
-  img.src = data.profilePic;
-  img.alt = "Profile Picture";
-  img.style.cssText = `
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-left: 20px;
-  `;
-  header.appendChild(img);
-}
 
-  resumeContent.prepend(header);
+  if (data.profilePic) {
+    const img = document.createElement("img");
+    img.src = data.profilePic;
+    img.setAttribute("crossorigin", "anonymous");
+    img.style.cssText = `
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-left: 20px;
+    `;
+    header.appendChild(img);
+  }
 
-  // Contact links
+  // Replace old name block
+  const oldName = document.getElementById("name");
+  if (oldName) oldName.parentElement.removeChild(oldName);
+  resume.insertBefore(header, resume.firstChild);
+
+  document.getElementById("description").textContent = data.description || "";
+
   const contact = document.querySelector(".contact");
-  contact.innerHTML = `
+  contact.innerHTML += `
     ${data.email ? `<a href="mailto:${data.email}">${data.email}</a>` : ""}
     ${data.phone ? ` ⋄ ${data.phone}` : ""}
     ${data.linkedin ? ` ⋄ <a href="${data.linkedin}" target="_blank">LinkedIn</a>` : ""}
     ${data.portfolio ? ` ⋄ <a href="${data.portfolio}" target="_blank">Portfolio</a>` : ""}
   `;
 
-  document.getElementById("description").textContent = data.description || "";
-
-  // Clear and populate sections
-  const sections = {
-    education: "education-section",
-    skills: "skills-list",
-    projects: "projects-section",
-    certificates: "certificates-section",
-    experience: "experience-section"
+  // Sections
+  const fillSection = (id, items, formatter) => {
+    const container = document.getElementById(id);
+    items?.forEach(entry => {
+      const div = document.createElement("div");
+      div.innerHTML = formatter(entry);
+      container.appendChild(div);
+    });
   };
 
-  Object.values(sections).forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.innerHTML = "";
-  });
+  fillSection("education-section", data.education, e =>
+    `<strong>${e.degree}</strong> at ${e.institution} (${e.year})<br>Marks: ${e.marks}<br><br>`
+  );
 
-  // Education
-  data.education?.forEach(edu => {
-    const div = document.createElement("div");
-    div.innerHTML = `<strong>${edu.degree}</strong> at ${edu.institution} (${edu.year})<br>Marks: ${edu.marks}<br><br>`;
-    document.getElementById("education-section").appendChild(div);
-  });
+  fillSection("skills-list", data.skills, s => `<li>${s}</li>`);
 
-  // Skills
-  data.skills?.forEach(skill => {
-    const li = document.createElement("li");
-    li.textContent = skill;
-    document.getElementById("skills-list").appendChild(li);
-  });
+  fillSection("projects-section", data.projects, p =>
+    `<strong>${p.name}</strong><br>${p.desc}<br>${p.link ? `<a href="${p.link}" target="_blank">${p.link}</a>` : ""}<br><br>`
+  );
 
-  // Projects
-  data.projects?.forEach(p => {
-    const div = document.createElement("div");
-    div.innerHTML = `
-      <strong>${p.name}</strong><br>
-      ${p.desc}<br>
-      ${p.link ? `<a href="${p.link}" target="_blank">${p.link}</a>` : ""}
-      <br><br>
-    `;
-    document.getElementById("projects-section").appendChild(div);
-  });
+  fillSection("certificates-section", data.certificates, c =>
+    `<strong>${c.title}</strong> from ${c.org} (${c.date})<br><br>`
+  );
 
-  // Certificates
-  data.certificates?.forEach(c => {
-    const div = document.createElement("div");
-    div.innerHTML = `<strong>${c.title}</strong> from ${c.org} (${c.date})<br><br>`;
-    document.getElementById("certificates-section").appendChild(div);
-  });
-
-  // Experience
-  data.experience?.forEach(e => {
-    const div = document.createElement("div");
-    div.innerHTML = `<strong>${e.title}</strong> at ${e.company} (${e.duration})<br>${e.description}<br><br>`;
-    document.getElementById("experience-section").appendChild(div);
-  });
+  fillSection("experience-section", data.experience, e =>
+    `<strong>${e.title}</strong> at ${e.company} (${e.duration})<br>${e.description}<br><br>`
+  );
 });
 
-// ✅ Final PDF Generator
+// Final PDF download with image loading fix
 function downloadPDF() {
   const element = document.getElementById("resume-content");
-  setTimeout(() => {
+
+  const images = element.querySelectorAll("img");
+  let loaded = 0;
+
+  if (images.length === 0) return generatePDF();
+
+  images.forEach(img => {
+    img.onload = () => {
+      loaded++;
+      if (loaded === images.length) generatePDF();
+    };
+    if (img.complete) {
+      loaded++;
+      if (loaded === images.length) generatePDF();
+    }
+  });
+
+  function generatePDF() {
     html2pdf().from(element).set({
       margin: 0.5,
       filename: "My_Resume.pdf",
@@ -121,5 +110,5 @@ function downloadPDF() {
       },
       jsPDF: { unit: "in", format: "a4", orientation: "portrait" }
     }).save();
-  }, 300);
+  }
 }

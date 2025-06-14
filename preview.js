@@ -73,15 +73,20 @@ document.addEventListener("DOMContentLoaded", () => {
 // ✅ FINAL working PDF download (with optional image support)
 function downloadPDF() {
   const element = document.getElementById("resume-content");
-
-  html2pdf().from(element).set({
-    margin: 0.5,
-    filename: "My_Resume.pdf",
-    image: { type: "jpeg", quality: 0.98 },
-    html2canvas: {
-      scale: 2,
-      useCORS: true
-    },
-    jsPDF: { unit: "in", format: "a4", orientation: "portrait" }
-  }).save();
+  setTimeout(() => {
+    html2pdf().from(element).set({
+      margin: 0.5,
+      filename: 'My_Resume.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: {
+        scale: window.devicePixelRatio > 1 ? 2 : 1,
+        useCORS: true
+      },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    }).save();
+  }, 800);
+}
+html2canvas: {
+  scale: 1,
+  useCORS: true
 }

@@ -1,12 +1,3 @@
-function readFileAsDataURL(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = e => resolve(e.target.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
 function safeValue(selector) {
   const el = document.querySelector(selector);
   return el ? el.value : "";
@@ -14,10 +5,10 @@ function safeValue(selector) {
 
 let allSkills = [];
 
-// Prevent form submit
+// Prevent form submission
 document.getElementById("resume-form").addEventListener("submit", e => e.preventDefault());
 
-// Skills input
+// Handle comma-separated or dynamic skill inputs
 document.getElementById("skill-input").addEventListener("keydown", function (e) {
   if (e.key === "," || e.key === "Enter") {
     e.preventDefault();
@@ -46,7 +37,7 @@ function removeSkill(index) {
   displaySkills();
 }
 
-// Dynamic add functions
+// Dynamic Adders
 function addEducation() {
   const section = document.getElementById("education-section");
   const entry = document.createElement("div");
@@ -59,6 +50,7 @@ function addEducation() {
     <hr>`;
   section.insertBefore(entry, section.lastElementChild);
 }
+
 function addSkill() {
   const section = document.getElementById('skills-section');
   const entry = document.createElement('div');
@@ -100,6 +92,8 @@ function addExperience() {
     <textarea name="job_description[]" placeholder="Job Description" rows="3"></textarea>`;
   section.insertBefore(entry, section.lastElementChild);
 }
+
+// Main Generator
 async function generateResume() {
   const educationEntries = document.querySelectorAll(".education-entry");
   const education = Array.from(educationEntries).map(entry => ({
@@ -108,27 +102,25 @@ async function generateResume() {
     year: entry.querySelector('[name="year[]"]')?.value || "",
     marks: entry.querySelector('[name="marks[]"]')?.value || ""
   }));
-const skillInputs = document.querySelectorAll('input[name="skills[]"]');
-const skills = Array.from(skillInputs)
-  .map(input => input.value.trim())
-  .filter(skill => skill !== "");
 
-  const projectEntries = document.querySelectorAll(".project-entry");
-  const projects = Array.from(projectEntries).map(entry => ({
+  const skillInputs = document.querySelectorAll('input[name="skills[]"]');
+  const skillsInputted = Array.from(skillInputs)
+    .map(input => input.value.trim())
+    .filter(skill => skill !== "");
+
+  const projects = Array.from(document.querySelectorAll(".project-entry")).map(entry => ({
     name: entry.querySelector('[name="project_name[]"]')?.value || "",
     desc: entry.querySelector('[name="project_desc[]"]')?.value || "",
     link: entry.querySelector('[name="project_link[]"]')?.value || ""
   })).filter(p => p.name || p.desc || p.link);
 
-  const certificateEntries = document.querySelectorAll(".certificate-entry");
-  const certificates = Array.from(certificateEntries).map(entry => ({
+  const certificates = Array.from(document.querySelectorAll(".certificate-entry")).map(entry => ({
     title: entry.querySelector('[name="certificate_title[]"]')?.value || "",
     org: entry.querySelector('[name="certificate_org[]"]')?.value || "",
     date: entry.querySelector('[name="certificate_date[]"]')?.value || ""
   }));
 
-  const experienceEntries = document.querySelectorAll(".experience-entry");
-  const experience = Array.from(experienceEntries).map(entry => ({
+  const experience = Array.from(document.querySelectorAll(".experience-entry")).map(entry => ({
     title: entry.querySelector('[name="job_title[]"]')?.value || "",
     company: entry.querySelector('[name="company[]"]')?.value || "",
     duration: entry.querySelector('[name="duration[]"]')?.value || "",
@@ -136,23 +128,25 @@ const skills = Array.from(skillInputs)
   }));
 
   const data = {
-    name: safeValue('#name'),
-    email: safeValue('#email'),
-    phone: safeValue('#phone'),
-    location: safeValue('#location'),
-    linkedin: safeValue('#linkedin'),
-    portfolio: safeValue('#portfolio'),
-    description: safeValue('#description'),
-    skills,
+    name: safeValue("#name"),
+    email: safeValue("#email"),
+    phone: safeValue("#phone"),
+    location: safeValue("#location"),
+    linkedin: safeValue("#linkedin"),
+    portfolio: safeValue("#portfolio"),
+    description: safeValue("#description"),
+    skills: [...skillsInputted, ...allSkills],
     education,
     projects,
     certificates,
-    experience,
+    experience
   };
 
   localStorage.setItem("resumeData", JSON.stringify(data));
   window.location.href = "preview.html";
 }
+
+// Connect generate button
 document.addEventListener("DOMContentLoaded", function () {
   const generateBtn = document.getElementById("generateBtn");
   if (generateBtn) {

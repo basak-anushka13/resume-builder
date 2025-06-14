@@ -49,6 +49,11 @@ document.addEventListener("DOMContentLoaded", () => {
     ${data.linkedin ? ` ⋄ <a href="${data.linkedin}" target="_blank">LinkedIn</a>` : ""}
     ${data.portfolio ? ` ⋄ <a href="${data.portfolio}" target="_blank">Portfolio</a>` : ""}
   `;
+data.skills?.forEach(skill => {
+  const li = document.createElement("li");
+  li.textContent = skill;
+  document.getElementById("skills-list").appendChild(li);
+});
 
   // Sections
   const fillSection = (id, items, formatter) => {

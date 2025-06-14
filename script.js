@@ -108,6 +108,13 @@ function addEducation() {
     <hr>`;
   section.insertBefore(entry, section.lastElementChild);
 }
+function addSkill() {
+  const section = document.getElementById('skills-section');
+  const entry = document.createElement('div');
+  entry.classList.add('skill-entry');
+  entry.innerHTML = `<input type="text" name="skills[]" placeholder="Enter a skill">`;
+  section.insertBefore(entry, section.lastElementChild);
+}
 
 function addProject() {
   const section = document.getElementById("projects-section");

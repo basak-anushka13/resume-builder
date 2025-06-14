@@ -21,20 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
   `;
   header.appendChild(left);
 
-  if (data.profilePic) {
-    const img = document.createElement("img");
-    img.src = data.profilePic;
-    img.setAttribute("crossorigin", "anonymous");
-    img.style.cssText = `
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-left: 20px;
-    `;
-    header.appendChild(img);
-  }
-
   // Replace old name block
   const oldName = document.getElementById("name");
   if (oldName) oldName.parentElement.removeChild(oldName);
@@ -103,6 +89,20 @@ function downloadPDF() {
       if (loaded === images.length) generatePDF();
     }
   });
+function downloadPDF() {
+  const element = document.getElementById("resume-content");
+
+  html2pdf().from(element).set({
+    margin: 0.5,
+    filename: "My_Resume.pdf",
+    image: { type: "jpeg", quality: 0.98 },
+    html2canvas: {
+      scale: 2,
+      useCORS: true
+    },
+    jsPDF: { unit: "in", format: "a4", orientation: "portrait" }
+  }).save();
+}
 
   function generatePDF() {
     html2pdf().from(element).set({

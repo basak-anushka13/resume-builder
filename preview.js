@@ -2,9 +2,44 @@ document.addEventListener("DOMContentLoaded", () => {
   const data = JSON.parse(localStorage.getItem("resumeData"));
   if (!data) return;
 
-  // Set basic info
-  document.getElementById("location").textContent = data.location || "";
-  document.getElementById("description").textContent = data.description || "";
+  const resume = document.querySelector(".resume");
+  const resumeContent = document.getElementById("resume-content");
+
+  // Clear name if already set to avoid duplication
+  const existingName = document.getElementById("name");
+  if (existingName) existingName.remove();
+
+  // Build top header with name, location, and profile pic
+  const header = document.createElement("div");
+  header.style.cssText = `
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  `;
+
+  const left = document.createElement("div");
+  left.innerHTML = `
+    <h1 style="margin: 0;">${data.name || ""}</h1>
+    <div style="color:#555; font-size:14px;">${data.location || ""}</div>
+  `;
+  header.appendChild(left);
+
+  if (data.profilePic) {
+    const img = document.createElement("img");
+    img.src = data.profilePic;
+    img.alt = "Profile Picture";
+    img.style.cssText = `
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-left: 20px;
+    `;
+    header.appendChild(img);
+  }
+
+  resumeContent.prepend(header);
 
   // Contact links
   const contact = document.querySelector(".contact");
@@ -15,12 +50,21 @@ document.addEventListener("DOMContentLoaded", () => {
     ${data.portfolio ? ` ⋄ <a href="${data.portfolio}" target="_blank">Portfolio</a>` : ""}
   `;
 
-  // Clear previous entries
-  document.getElementById("education-section").innerHTML = "";
-  document.getElementById("skills-list").innerHTML = "";
-  document.getElementById("projects-section").innerHTML = "";
-  document.getElementById("certificates-section").innerHTML = "";
-  document.getElementById("experience-section").innerHTML = "";
+  document.getElementById("description").textContent = data.description || "";
+
+  // Clear and populate sections
+  const sections = {
+    education: "education-section",
+    skills: "skills-list",
+    projects: "projects-section",
+    certificates: "certificates-section",
+    experience: "experience-section"
+  };
+
+  Object.values(sections).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = "";
+  });
 
   // Education
   data.education?.forEach(edu => {
@@ -38,16 +82,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Projects
   data.projects?.forEach(p => {
-    if (p.name || p.desc || p.link) {
-      const div = document.createElement("div");
-      div.innerHTML = `
-        <strong>${p.name}</strong><br>
-        ${p.desc}<br>
-        ${p.link ? `<a href="${p.link}" target="_blank">${p.link}</a>` : ""}
-        <br><br>
-      `;
-      document.getElementById("projects-section").appendChild(div);
-    }
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <strong>${p.name}</strong><br>
+      ${p.desc}<br>
+      ${p.link ? `<a href="${p.link}" target="_blank">${p.link}</a>` : ""}
+      <br><br>
+    `;
+    document.getElementById("projects-section").appendChild(div);
   });
 
   // Certificates
@@ -63,86 +105,9 @@ document.addEventListener("DOMContentLoaded", () => {
     div.innerHTML = `<strong>${e.title}</strong> at ${e.company} (${e.duration})<br>${e.description}<br><br>`;
     document.getElementById("experience-section").appendChild(div);
   });
+});
 
-  // Profile Pic
- // Rebuild the top header with name, location, and profile picture
-const resume = document.querySelector(".resume");
-const header = document.createElement("div");
-header.style.cssText = `
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-
-const left = document.createElement("div");
-left.innerHTML = `
-  <h1 style="margin: 0;">${data.name}</h1>
-  <div class="contact" style="color:#555; font-size:14px; margin-top: 4px;">${data.location || ""}</div>
-`;
-
-header.appendChild(left);
-
-// If profile picture exists, show it
-if (data.profilePic) {
-  const img = document.createElement("img");
-  img.src = data.profilePic;
-  img.style.cssText = `
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-left: 20px;
-  `;
-  header.appendChild(img);
-}
-
-// Replace existing name + location block (optional)
-const resumeContent = document.getElementById("resume-content");
-
-// Remove default #name element if it exists
-const oldName = document.getElementById("name");
-if (oldName && oldName.parentElement) {
-  oldName.parentElement.removeChild(oldName);
-}
-
-// Create a new top header div
-const header = document.createElement("div");
-header.style.cssText = `
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-`;
-
-// Left: Name and Location
-const left = document.createElement("div");
-left.innerHTML = `
-  <h1 style="margin: 0;">${data.name}</h1>
-  <div class="contact" style="color:#555; font-size:14px; margin-top: 4px;">${data.location || ""}</div>
-`;
-header.appendChild(left);
-
-// Right: Profile Picture (if exists)
-if (data.profilePic) {
-  const img = document.createElement("img");
-  img.src = data.profilePic;
-  img.alt = "Profile Picture";
-  img.style.cssText = `
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-left: 20px;
-  `;
-  header.appendChild(img);
-}
-
-// Insert at the very top of resume content
-resumeContent.insertBefore(header, resumeContent.firstChild);
-
-// ✅ Final working PDF generator
+// ✅ Final PDF Generator
 function downloadPDF() {
   const element = document.getElementById("resume-content");
   setTimeout(() => {
@@ -156,5 +121,5 @@ function downloadPDF() {
       },
       jsPDF: { unit: "in", format: "a4", orientation: "portrait" }
     }).save();
-  }, 300); // short delay ensures everything loads
+  }, 300);
 }

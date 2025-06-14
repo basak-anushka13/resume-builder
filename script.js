@@ -7,7 +7,6 @@ function readFileAsDataURL(file) {
   });
 }
 
-// Helper to safely get input values
 function safeValue(selector) {
   const el = document.querySelector(selector);
   return el ? el.value : "";
@@ -15,26 +14,28 @@ function safeValue(selector) {
 
 let allSkills = [];
 
-// Prevent form from submitting normally
-document.getElementById("resume-form").addEventListener("submit", function (e) {
-  e.preventDefault();
+// Prevent form submit
+document.getElementById("resume-form").addEventListener("submit", e => e.preventDefault());
+
+// Skills input
+document.getElementById("skill-input").addEventListener("keydown", function (e) {
+  if (e.key === "," || e.key === "Enter") {
+    e.preventDefault();
+    const input = e.target.value.trim().replace(/,$/, "");
+    if (input && !allSkills.includes(input)) {
+      allSkills.push(input);
+      displaySkills();
+    }
+    e.target.value = "";
+  }
 });
 
-// Handle skill tags
-function addSkill() {
-  const section = document.getElementById('skills-section');
-  const entry = document.createElement('div');
-  entry.classList.add('skills-entry');
-  entry.innerHTML = `<input type="text" name="skills[]" placeholder="Skill">`;
-  section.insertBefore(entry, section.lastElementChild); // Before button
-}
-
 function displaySkills() {
-  const container = document.getElementById('skill-tags');
-  container.innerHTML = '';
+  const container = document.getElementById("skill-tags");
+  container.innerHTML = "";
   allSkills.forEach((skill, index) => {
-    const tag = document.createElement('div');
-    tag.classList.add('skill-tag');
+    const tag = document.createElement("div");
+    tag.classList.add("skill-tag");
     tag.innerHTML = `${skill} <span class="remove-tag" onclick="removeSkill(${index})">&times;</span>`;
     container.appendChild(tag);
   });
@@ -44,6 +45,7 @@ function removeSkill(index) {
   allSkills.splice(index, 1);
   displaySkills();
 }
+
 function previewProfilePic(input) {
   const file = input.files[0];
   const preview = document.getElementById("profilePicPreview");
@@ -54,39 +56,38 @@ function previewProfilePic(input) {
     return;
   }
 
+  if (file.size > 1024 * 1024) {
+    alert("Image must be under 1MB.");
+    input.value = "";
+    preview.src = "";
+    preview.style.display = "none";
+    return;
+  }
+
   const reader = new FileReader();
   reader.onload = function (e) {
     const img = new Image();
     img.onload = function () {
-      // Resize to max 200x200
       const canvas = document.createElement("canvas");
       const maxSize = 200;
-      let width = img.width;
-      let height = img.height;
+      let width = img.width, height = img.height;
 
-      if (width > height) {
-        if (width > maxSize) {
-          height *= maxSize / width;
-          width = maxSize;
-        }
-      } else {
-        if (height > maxSize) {
-          width *= maxSize / height;
-          height = maxSize;
-        }
+      if (width > height && width > maxSize) {
+        height *= maxSize / width;
+        width = maxSize;
+      } else if (height > maxSize) {
+        width *= maxSize / height;
+        height = maxSize;
       }
 
       canvas.width = width;
       canvas.height = height;
       const ctx = canvas.getContext("2d");
       ctx.drawImage(img, 0, 0, width, height);
-
-      const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.85); // ✅ good quality
+      const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.85);
 
       preview.src = compressedDataUrl;
       preview.style.display = "block";
-
-      // Store the compressed version globally for preview.js
       window.compressedProfilePic = compressedDataUrl;
     };
     img.src = e.target.result;
@@ -94,58 +95,55 @@ function previewProfilePic(input) {
   reader.readAsDataURL(file);
 }
 
-// Dynamic Section Adders (without file inputs)
+// Dynamic add functions
 function addEducation() {
-  const section = document.getElementById('education-section');
-  const entry = document.createElement('div');
-  entry.classList.add('education-entry');
+  const section = document.getElementById("education-section");
+  const entry = document.createElement("div");
+  entry.classList.add("education-entry");
   entry.innerHTML = `
     <input type="text" name="degree[]" placeholder="Degree / Course Name">
     <input type="text" name="institution[]" placeholder="Institution Name">
     <input type="text" name="year[]" placeholder="Year of Passing">
     <input type="text" name="marks[]" placeholder="Marks / GPA">
-    <hr>
-  `;
+    <hr>`;
   section.insertBefore(entry, section.lastElementChild);
 }
+
 function addProject() {
-  const section = document.getElementById('projects-section');
-  const entry = document.createElement('div');
-  entry.classList.add('project-entry');
+  const section = document.getElementById("projects-section");
+  const entry = document.createElement("div");
+  entry.classList.add("project-entry");
   entry.innerHTML = `
     <input type="text" name="project_name[]" placeholder="Project Name">
     <textarea name="project_desc[]" placeholder="Short Description"></textarea>
-    <input type="url" name="project_link[]" placeholder="Project Link (optional)">
-  `;
+    <input type="url" name="project_link[]" placeholder="Project Link (optional)">`;
   section.insertBefore(entry, section.lastElementChild);
 }
 
 function addCertificate() {
-  const section = document.getElementById('certificates-section');
-  const entry = document.createElement('div');
-  entry.classList.add('certificate-entry');
+  const section = document.getElementById("certificates-section");
+  const entry = document.createElement("div");
+  entry.classList.add("certificate-entry");
   entry.innerHTML = `
     <input type="text" name="certificate_title[]" placeholder="Certificate Title">
     <input type="text" name="certificate_org[]" placeholder="Issuing Organization">
-    <input type="month" name="certificate_date[]">
-  `;
+    <input type="month" name="certificate_date[]">`;
   section.insertBefore(entry, section.lastElementChild);
 }
 
 function addExperience() {
-  const section = document.getElementById('experience-section');
-  const entry = document.createElement('div');
-  entry.classList.add('experience-entry');
+  const section = document.getElementById("experience-section");
+  const entry = document.createElement("div");
+  entry.classList.add("experience-entry");
   entry.innerHTML = `
     <input type="text" name="job_title[]" placeholder="Job Title">
     <input type="text" name="company[]" placeholder="Company Name">
     <input type="text" name="duration[]" placeholder="Duration (e.g., Jan 2022 - Dec 2023)">
-    <textarea name="job_description[]" placeholder="Job Description" rows="3"></textarea>
-  `;
+    <textarea name="job_description[]" placeholder="Job Description" rows="3"></textarea>`;
   section.insertBefore(entry, section.lastElementChild);
 }
 
-// Main resume generation
+// Resume generation
 document.addEventListener("DOMContentLoaded", function () {
   const generateBtn = document.getElementById("generateBtn");
   if (generateBtn) {
@@ -164,8 +162,6 @@ async function generateResume() {
     year: entry.querySelector('[name="year[]"]')?.value || "",
     marks: entry.querySelector('[name="marks[]"]')?.value || ""
   }));
-const skillInputs = document.querySelectorAll('[name="skills[]"]');
-const skills = Array.from(skillInputs).map(input => input.value.trim()).filter(Boolean);
 
   const projectEntries = document.querySelectorAll(".project-entry");
   const projects = Array.from(projectEntries).map(entry => ({
@@ -189,11 +185,7 @@ const skills = Array.from(skillInputs).map(input => input.value.trim()).filter(B
     description: entry.querySelector('[name="job_description[]"]')?.value || ""
   }));
 
-  let profilePic = "";
-  const picInput = document.getElementById("profilePic");
- if (window.compressedProfilePic) {
-  profilePic = window.compressedProfilePic;
-}
+  const profilePic = window.compressedProfilePic || "";
 
   const data = {
     name: safeValue('#name'),
@@ -203,7 +195,7 @@ const skills = Array.from(skillInputs).map(input => input.value.trim()).filter(B
     linkedin: safeValue('#linkedin'),
     portfolio: safeValue('#portfolio'),
     description: safeValue('#description'),
-    skills,
+    skills: allSkills,
     education,
     projects,
     certificates,

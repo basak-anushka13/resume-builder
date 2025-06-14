@@ -2,65 +2,39 @@ document.addEventListener("DOMContentLoaded", () => {
   const data = JSON.parse(localStorage.getItem("resumeData"));
   if (!data) return;
 
-  // Header
+  // Top details
   document.getElementById("name").textContent = data.name || "";
-document.getElementById("location").textContent = data.location || "";
-document.getElementById("description").textContent = data.description || "";
-if (data.profilePic) {
-  document.getElementById("profile-picture").src = data.profilePic;
-  document.getElementById("profile-picture").style.display = "block";
-}
+  document.getElementById("location").textContent = data.location || "";
+  document.getElementById("description").textContent = data.description || "";
 
-// Email
-if (data.email) {
-  const emailEl = document.getElementById("email");
-  emailEl.textContent = data.email;
-  emailEl.href = "mailto:" + data.email;
-}
-
-// Phone
-if (data.phone) {
-  const phoneEl = document.getElementById("phone");
-  phoneEl.textContent = data.phone;
-  phoneEl.href = "tel:" + data.phone.replace(/\s+/g, '');
-}
-
-// LinkedIn
-if (data.linkedin) {
-  const linkedinEl = document.getElementById("linkedin");
-  linkedinEl.textContent = "LinkedIn";
-  linkedinEl.href = data.linkedin.startsWith("http") ? data.linkedin : "https://" + data.linkedin;
-}
-
-// Portfolio
-if (data.portfolio) {
-  const portfolioEl = document.getElementById("portfolio");
-  portfolioEl.textContent = "Portfolio";
-  portfolioEl.href = data.portfolio.startsWith("http") ? data.portfolio : "https://" + data.portfolio;
-}
+  // Contact links
+  const contact = document.querySelector(".contact");
+  contact.innerHTML = `
+    ${data.email ? `<a href="mailto:${data.email}">${data.email}</a>` : ""}
+    ${data.phone ? `⋄ ${data.phone}` : ""}
+    ${data.linkedin ? `⋄ <a href="${data.linkedin}" target="_blank">LinkedIn</a>` : ""}
+    ${data.portfolio ? `⋄ <a href="${data.portfolio}" target="_blank">Portfolio</a>` : ""}
+  `;
 
   // Education
   const edu = document.getElementById("education-section");
-  data.education.forEach(e => {
+  data.education?.forEach(eduEntry => {
     const div = document.createElement("div");
-    div.innerHTML = `<strong>${e.degree}</strong> at ${e.institution} (${e.year})<br>Marks: ${e.marks}<br><br>`;
+    div.innerHTML = `<strong>${eduEntry.degree}</strong> at ${eduEntry.institution} (${eduEntry.year})<br>Marks: ${eduEntry.marks}<br><br>`;
     edu.appendChild(div);
   });
 
   // Skills
   const skillsList = document.getElementById("skills-list");
-  data.skills.forEach(skill => {
+  data.skills?.forEach(skill => {
     const li = document.createElement("li");
     li.textContent = skill;
     skillsList.appendChild(li);
   });
 
   // Projects
- const proj = document.getElementById("projects-section");
-
-data.projects
-  .filter(p => p.name || p.desc || p.link) // ✅ only keep filled projects
-  .forEach(p => {
+  const proj = document.getElementById("projects-section");
+  data.projects?.forEach(p => {
     const div = document.createElement("div");
     div.innerHTML = `
       <strong>${p.name}</strong><br>
@@ -71,13 +45,9 @@ data.projects
     proj.appendChild(div);
   });
 
-if (proj.children.length === 0) {
-  document.getElementById("projects-container").style.display = "none"; // ✅ hide whole section if no entries
-}
-
   // Certificates
   const cert = document.getElementById("certificates-section");
-  data.certificates.forEach(c => {
+  data.certificates?.forEach(c => {
     const div = document.createElement("div");
     div.innerHTML = `<strong>${c.title}</strong> from ${c.org} (${c.date})<br><br>`;
     cert.appendChild(div);
@@ -85,12 +55,21 @@ if (proj.children.length === 0) {
 
   // Experience
   const exp = document.getElementById("experience-section");
-  data.experience.forEach(e => {
+  data.experience?.forEach(e => {
     const div = document.createElement("div");
-    div.innerHTML = `<strong>${e.title}</strong> at ${e.company}<br>${e.duration}<br>${e.description}<br><br>`;
+    div.innerHTML = `<strong>${e.title}</strong> at ${e.company} (${e.duration})<br>${e.description}<br><br>`;
     exp.appendChild(div);
   });
+
+  // Profile Picture
+  if (data.profilePic) {
+    const img = document.createElement("img");
+    img.src = data.profilePic;
+    img.style.cssText = "position: absolute; top: 40px; right: 60px; width: 100px; height: 100px; border-radius: 50%; object-fit: cover;";
+    document.querySelector(".resume").appendChild(img);
+  }
 });
+
 function downloadPDF() {
   const resume = document.getElementById("resume-content");
 

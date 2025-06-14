@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome | Élevé</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #0b3d2e, #ffffff);
+      color: #053c01;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    .logo {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: contain;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 36px;
+      font-family: 'Playfair Display', serif;
+      margin: 0;
+      color: #145a32;
+    }
+
+    .tagline {
+      font-size: 24px;
+      color: #cce8df;
+      margin-bottom: 40px;
+    }
+.typewriter {
+  font-size: 18px;
+  color: #e0f7f1;
+  margin-top: 20px;
+  height: 60px; /* enough space for 2 lines */
+  white-space: pre-line;
+  text-align: center;
+  min-height: 2em;
+}
+
+.cursor {
+  display: inline-block;
+  background: #e0f7f1;
+  width: 2px;
+  margin-left: 4px;
+  animation: blink 0.8s steps(1) infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+    .start-btn {
+      padding: 14px 28px;
+      font-size: 16px;
+      background: #00a87d;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .start-btn:hover {
+      background: #007e5c;
+    }
+    .brand-title {
+  font-size: 48px;
+  font-family: 'Playfair Display', serif;
+  margin: 0;
+  color: #1eff89; 
+  opacity: 0;
+  animation: fadeInOnce 2s ease-out forwards;
+}
+
+@keyframes fadeInOnce {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <img src="eleve-logo.png" alt="Élevé Logo" class="logo" />
+  <h1 class="brand-title">Elev&#769;e</h1>
+  <p class="tagline">Your personal digital resume builder</p>
+  <button class="start-btn" onclick="window.location.href='index.html'">Create Your Resume</button>
+  <div class="typewriter">
+  <p id="type-text"></p>
+</div>
+<script>
+const lines = [
+  "Build a resume that reflects who you are.",
+  "Just focus on your journey—we'll handle the format.",
+  "Professional. Personalized. Powerful."
+];
+
+const target = document.getElementById("type-text");
+let lineIndex = 0;
+let charIndex = 0;
+
+function typeLine() {
+  if (lineIndex < lines.length) {
+    if (charIndex <= lines[lineIndex].length) {
+      target.innerHTML = lines.slice(0, lineIndex).join('\n') + '\n' + lines[lineIndex].slice(0, charIndex) + '<span class="cursor"></span>';
+      charIndex++;
+      setTimeout(typeLine, 20); // typing speed
+    } else {
+      charIndex = 0;
+      lineIndex++;
+      setTimeout(typeLine, 300); // pause between lines
+    }
+  } else {
+    target.innerHTML = lines.join('\n'); // remove cursor at end
+  }
+}
+
+typeLine();
+</script>
+
+</body>
+</html>

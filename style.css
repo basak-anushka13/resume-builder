@@ -1,0 +1,199 @@
+.brand-name {
+  font-family: 'Cinzel', serif;
+  font-size: 64px;
+  color: #1eff89;
+  text-align: center;
+  margin-top: 60px;
+  letter-spacing: 2px;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(0, 255, 150, 0.4);
+}
+
+.tagline {
+  text-align: center;
+  font-size: 20px;
+  margin-top: -10px;
+  color: #c1f5da;
+  letter-spacing: 1px;
+  font-weight: 500;
+  font-family: 'Segoe UI', sans-serif;
+  text-shadow: 0 0 2px rgba(0, 255, 150, 0.4);
+}
+.logo-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.logo-img {
+  width: 80px;
+  height: auto;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease;
+}
+
+.logo-img:hover {
+  transform: scale(1.1);
+}
+
+/* Global background and layout */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to right, #003d2e 0%, #003d2e 40%, #ffffff 100%);
+  min-height: 100vh;
+}
+
+/* Container holds form and resume preview */
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+/* Form styling */
+form {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+input, textarea {
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+button {
+  margin-top: 20px;
+  padding: 12px 20px;
+  background: #145a32;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #117a42;
+}
+
+/* Resume box styling */
+#resume-preview {
+  margin-top: 40px;
+  padding: 30px;
+  background: #0b3d2e;
+  color: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+#resume-preview h2,
+#resume-preview h3 {
+  color: #c7f5d4;
+  border-bottom: 1px solid #c7f5d440;
+  padding-bottom: 5px;
+  margin-top: 20px;
+}
+
+#resume-preview p, #resume-preview ul {
+  font-size: 16px;
+  line-height: 1.6;
+}
+.entry {
+  margin-bottom: 15px;
+}
+.skill-tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.skill-tag {
+  background-color: #145a32;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.skill-tag .remove-tag {
+  margin-left: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.project-entry {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f0f0f0;
+  border-radius: 10px;
+}
+
+.project-entry input[type="text"],
+.project-entry textarea,
+.project-entry input[type="url"],
+.project-entry input[type="file"] {
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+.certificate-entry {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f0f0f0;
+  border-radius: 10px;
+}
+
+.certificate-entry input[type="text"],
+.certificate-entry input[type="month"],
+.certificate-entry input[type="file"] {
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+.file-preview img {
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  max-height: 150px;
+}
+.file-preview a {
+  font-size: 14px;
+  color: #007bff;
+  text-decoration: none;
+}
+.experience-entry {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f0f0f0;
+  border-radius: 10px;
+}
+
+.experience-entry input[type="text"],
+.experience-entry textarea,
+.experience-entry input[type="file"] {
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+

@@ -149,18 +149,6 @@ function addExperience() {
     <textarea name="job_description[]" placeholder="Job Description" rows="3"></textarea>`;
   section.insertBefore(entry, section.lastElementChild);
 }
-
-// Resume generation
-document.addEventListener("DOMContentLoaded", function () {
-  const generateBtn = document.getElementById("generateBtn");
-  if (generateBtn) {
-    generateBtn.addEventListener("click", async function (event) {
-      event.preventDefault();
-      await generateResume();
-    });
-  }
-});
-
 async function generateResume() {
   const educationEntries = document.querySelectorAll(".education-entry");
   const education = Array.from(educationEntries).map(entry => ({

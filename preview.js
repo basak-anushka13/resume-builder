@@ -92,6 +92,24 @@ if (proj.children.length === 0) {
     exp.appendChild(div);
   });
 });
+function downloadPDF() {
+  const resume = document.getElementById("resume-content");
+
+  // Delay rendering so fonts/images load fully
+  setTimeout(() => {
+    html2pdf().from(resume).set({
+      margin: 0.5,
+      filename: 'My_Resume.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: {
+        scale: 2,
+        useCORS: true,  // helps with images
+        logging: true
+      },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    }).save();
+  }, 300);  // 300ms delay ensures render finishes
+}
 
 function downloadPDF() {
   const element = document.getElementById("resume-content");

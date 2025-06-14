@@ -1,25 +1,9 @@
-function safeValue(selector) {
-  const el = document.querySelector(selector);
-  return el ? el.value : "";
-}
-
 let allSkills = [];
 
-// Prevent form submission
-document.getElementById("resume-form").addEventListener("submit", e => e.preventDefault());
-
-// Handle comma-separated or dynamic skill inputs
-document.getElementById("skill-input").addEventListener("keydown", function (e) {
-  if (e.key === "," || e.key === "Enter") {
-    e.preventDefault();
-    const input = e.target.value.trim().replace(/,$/, "");
-    if (input && !allSkills.includes(input)) {
-      allSkills.push(input);
-      displaySkills();
-    }
-    e.target.value = "";
-  }
-});
+function safeValue(selector) {
+  const el = document.querySelector(selector);
+  return el ? el.value.trim() : "";
+}
 
 function displaySkills() {
   const container = document.getElementById("skill-tags");
@@ -37,7 +21,39 @@ function removeSkill(index) {
   displaySkills();
 }
 
-// Dynamic Adders
+// ========== DOM READY ==========
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("resume-form");
+  if (form) {
+    form.addEventListener("submit", e => e.preventDefault());
+  }
+
+  const skillInput = document.getElementById("skill-input");
+  if (skillInput) {
+    skillInput.addEventListener("keydown", function (e) {
+      if (e.key === "," || e.key === "Enter") {
+        e.preventDefault();
+        const input = e.target.value.trim().replace(/,$/, "");
+        if (input && !allSkills.includes(input)) {
+          allSkills.push(input);
+          displaySkills();
+        }
+        e.target.value = "";
+      }
+    });
+  }
+
+  const generateBtn = document.getElementById("generateBtn");
+  if (generateBtn) {
+    generateBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      generateResume();
+    });
+  }
+});
+
+// ========== DYNAMIC SECTION ADDERS ==========
+
 function addEducation() {
   const section = document.getElementById("education-section");
   const entry = document.createElement("div");
@@ -52,9 +68,9 @@ function addEducation() {
 }
 
 function addSkill() {
-  const section = document.getElementById('skills-section');
-  const entry = document.createElement('div');
-  entry.classList.add('skill-entry');
+  const section = document.getElementById("skills-section");
+  const entry = document.createElement("div");
+  entry.classList.add("skill-entry");
   entry.innerHTML = `<input type="text" name="skills[]" placeholder="Enter a skill">`;
   section.insertBefore(entry, section.lastElementChild);
 }
@@ -93,10 +109,10 @@ function addExperience() {
   section.insertBefore(entry, section.lastElementChild);
 }
 
-// Main Generator
-async function generateResume() {
-  const educationEntries = document.querySelectorAll(".education-entry");
-  const education = Array.from(educationEntries).map(entry => ({
+// ========== FINAL GENERATION ==========
+
+function generateResume() {
+  const education = Array.from(document.querySelectorAll(".education-entry")).map(entry => ({
     degree: entry.querySelector('[name="degree[]"]')?.value || "",
     institution: entry.querySelector('[name="institution[]"]')?.value || "",
     year: entry.querySelector('[name="year[]"]')?.value || "",
@@ -104,9 +120,7 @@ async function generateResume() {
   }));
 
   const skillInputs = document.querySelectorAll('input[name="skills[]"]');
-  const skillsInputted = Array.from(skillInputs)
-    .map(input => input.value.trim())
-    .filter(skill => skill !== "");
+  const skills = Array.from(skillInputs).map(input => input.value.trim()).filter(s => s);
 
   const projects = Array.from(document.querySelectorAll(".project-entry")).map(entry => ({
     name: entry.querySelector('[name="project_name[]"]')?.value || "",
@@ -128,14 +142,14 @@ async function generateResume() {
   }));
 
   const data = {
-    name: safeValue("#name"),
-    email: safeValue("#email"),
-    phone: safeValue("#phone"),
-    location: safeValue("#location"),
-    linkedin: safeValue("#linkedin"),
-    portfolio: safeValue("#portfolio"),
-    description: safeValue("#description"),
-    skills: [...skillsInputted, ...allSkills],
+    name: safeValue('#name'),
+    email: safeValue('#email'),
+    phone: safeValue('#phone'),
+    location: safeValue('#location'),
+    linkedin: safeValue('#linkedin'),
+    portfolio: safeValue('#portfolio'),
+    description: safeValue('#description'),
+    skills: [...skills, ...allSkills], // combine both types of skill input
     education,
     projects,
     certificates,
@@ -145,14 +159,3 @@ async function generateResume() {
   localStorage.setItem("resumeData", JSON.stringify(data));
   window.location.href = "preview.html";
 }
-
-// Connect generate button
-document.addEventListener("DOMContentLoaded", function () {
-  const generateBtn = document.getElementById("generateBtn");
-  if (generateBtn) {
-    generateBtn.addEventListener("click", async function (event) {
-      event.preventDefault();
-      await generateResume();
-    });
-  }
-});

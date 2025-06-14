@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!data) return;
 
   // Set basic info
-  document.getElementById("name").textContent = data.name || "";
   document.getElementById("location").textContent = data.location || "";
   document.getElementById("description").textContent = data.description || "";
 

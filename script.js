@@ -157,5 +157,5 @@ function generateResume() {
   };
 
   localStorage.setItem("resumeData", JSON.stringify(data));
-  window.location.href = "preview.html";
+  window.location.href = "https://basak-anushka13.github.io/resume-builder/preview.html";
 }

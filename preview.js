@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const data = JSON.parse(localStorage.getItem("resumeData"));
   if (!data) return;
 
-  // Rebuild header with name, location, and image
+  // Rebuild header with name and location
   const resume = document.querySelector(".resume");
   const header = document.createElement("div");
   header.style.cssText = `
@@ -21,13 +21,15 @@ document.addEventListener("DOMContentLoaded", () => {
   `;
   header.appendChild(left);
 
-  // Replace old name block
+  // Remove old name block
   const oldName = document.getElementById("name");
   if (oldName) oldName.parentElement.removeChild(oldName);
   resume.insertBefore(header, resume.firstChild);
 
+  // Description
   document.getElementById("description").textContent = data.description || "";
 
+  // Contact section
   const contact = document.querySelector(".contact");
   contact.innerHTML += `
     ${data.email ? `<a href="mailto:${data.email}">${data.email}</a>` : ""}
@@ -35,22 +37,20 @@ document.addEventListener("DOMContentLoaded", () => {
     ${data.linkedin ? ` ⋄ <a href="${data.linkedin}" target="_blank">LinkedIn</a>` : ""}
     ${data.portfolio ? ` ⋄ <a href="${data.portfolio}" target="_blank">Portfolio</a>` : ""}
   `;
-data.skills?.forEach(skill => {
-  const li = document.createElement("li");
-  li.textContent = skill;
-  document.getElementById("skills-list").appendChild(li);
-});
 
-  // Sections
+  // Section filler
   const fillSection = (id, items, formatter) => {
     const container = document.getElementById(id);
-    items?.forEach(entry => {
+    if (!container || !items) return;
+    container.innerHTML = ""; // Clear previous if any
+    items.forEach(entry => {
       const div = document.createElement("div");
       div.innerHTML = formatter(entry);
       container.appendChild(div);
     });
   };
 
+  // Populate all sections
   fillSection("education-section", data.education, e =>
     `<strong>${e.degree}</strong> at ${e.institution} (${e.year})<br>Marks: ${e.marks}<br><br>`
   );
@@ -70,25 +70,7 @@ data.skills?.forEach(skill => {
   );
 });
 
-// Final PDF download with image loading fix
-function downloadPDF() {
-  const element = document.getElementById("resume-content");
-
-  const images = element.querySelectorAll("img");
-  let loaded = 0;
-
-  if (images.length === 0) return generatePDF();
-
-  images.forEach(img => {
-    img.onload = () => {
-      loaded++;
-      if (loaded === images.length) generatePDF();
-    };
-    if (img.complete) {
-      loaded++;
-      if (loaded === images.length) generatePDF();
-    }
-  });
+// ✅ FINAL working PDF download (with optional image support)
 function downloadPDF() {
   const element = document.getElementById("resume-content");
 
@@ -102,18 +84,4 @@ function downloadPDF() {
     },
     jsPDF: { unit: "in", format: "a4", orientation: "portrait" }
   }).save();
-}
-
-  function generatePDF() {
-    html2pdf().from(element).set({
-      margin: 0.5,
-      filename: "My_Resume.pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: {
-        scale: 2,
-        useCORS: true
-      },
-      jsPDF: { unit: "in", format: "a4", orientation: "portrait" }
-    }).save();
-  }
 }

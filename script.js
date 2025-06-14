@@ -46,55 +46,6 @@ function removeSkill(index) {
   displaySkills();
 }
 
-function previewProfilePic(input) {
-  const file = input.files[0];
-  const preview = document.getElementById("profilePicPreview");
-
-  if (!file || !file.type.startsWith("image/")) {
-    preview.src = "";
-    preview.style.display = "none";
-    return;
-  }
-
-  if (file.size > 1024 * 1024) {
-    alert("Image must be under 1MB.");
-    input.value = "";
-    preview.src = "";
-    preview.style.display = "none";
-    return;
-  }
-
-  const reader = new FileReader();
-  reader.onload = function (e) {
-    const img = new Image();
-    img.onload = function () {
-      const canvas = document.createElement("canvas");
-      const maxSize = 200;
-      let width = img.width, height = img.height;
-
-      if (width > height && width > maxSize) {
-        height *= maxSize / width;
-        width = maxSize;
-      } else if (height > maxSize) {
-        width *= maxSize / height;
-        height = maxSize;
-      }
-
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, width, height);
-      const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.85);
-
-      preview.src = compressedDataUrl;
-      preview.style.display = "block";
-      window.compressedProfilePic = compressedDataUrl;
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
 // Dynamic add functions
 function addEducation() {
   const section = document.getElementById("education-section");
@@ -184,8 +135,6 @@ const skills = Array.from(skillInputs)
     description: entry.querySelector('[name="job_description[]"]')?.value || ""
   }));
 
-  const profilePic = window.compressedProfilePic || "";
-
   const data = {
     name: safeValue('#name'),
     email: safeValue('#email'),
@@ -199,7 +148,6 @@ const skills = Array.from(skillInputs)
     projects,
     certificates,
     experience,
-    profilePic
   };
 
   localStorage.setItem("resumeData", JSON.stringify(data));

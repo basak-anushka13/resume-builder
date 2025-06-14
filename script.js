@@ -76,7 +76,6 @@ function addEducation() {
   `;
   section.insertBefore(entry, section.lastElementChild);
 }
-
 function addProject() {
   const section = document.getElementById('projects-section');
   const entry = document.createElement('div');
@@ -133,6 +132,8 @@ async function generateResume() {
     year: entry.querySelector('[name="year[]"]')?.value || "",
     marks: entry.querySelector('[name="marks[]"]')?.value || ""
   }));
+const skillInputs = document.querySelectorAll('[name="skills[]"]');
+const skills = Array.from(skillInputs).map(input => input.value.trim()).filter(Boolean);
 
   const projectEntries = document.querySelectorAll(".project-entry");
   const projects = Array.from(projectEntries).map(entry => ({

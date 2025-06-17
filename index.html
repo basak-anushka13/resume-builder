@@ -11,11 +11,6 @@
       font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(to right, #0b3d2e, #ffffff);
       color: #053c01;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
       text-align: center;
     }
 
@@ -24,43 +19,24 @@
       height: 100px;
       border-radius: 50%;
       object-fit: contain;
-      margin-bottom: 20px;
+      margin: 20px auto 10px;
+      display: block;
     }
 
-    h1 {
-      font-size: 36px;
+    h1.brand-title {
+      font-size: 48px;
       font-family: 'Playfair Display', serif;
       margin: 0;
-      color: #145a32;
+      color: #1eff89;
+      animation: fadeInOnce 2s ease-out forwards;
+      opacity: 0;
     }
 
     .tagline {
       font-size: 24px;
       color: #cce8df;
-      margin-bottom: 40px;
+      margin: 10px 0 30px;
     }
-.typewriter {
-  font-size: 18px;
-  color: #e0f7f1;
-  margin-top: 20px;
-  height: 60px; /* enough space for 2 lines */
-  white-space: pre-line;
-  text-align: center;
-  min-height: 2em;
-}
-
-.cursor {
-  display: inline-block;
-  background: #e0f7f1;
-  width: 2px;
-  margin-left: 4px;
-  animation: blink 0.8s steps(1) infinite;
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 0; }
-  50% { opacity: 1; }
-}
 
     .start-btn {
       padding: 14px 28px;
@@ -71,93 +47,111 @@
       color: white;
       cursor: pointer;
       transition: background 0.3s ease;
+      margin-bottom: 30px;
     }
 
     .start-btn:hover {
       background: #007e5c;
     }
-    .brand-title {
-  font-size: 48px;
-  font-family: 'Playfair Display', serif;
-  margin: 0;
-  color: #1eff89; 
-  opacity: 0;
-  animation: fadeInOnce 2s ease-out forwards;
-}
 
-@keyframes fadeInOnce {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.why-eleve {
-  text-align: center;
-  padding: 60px 20px;
-  background: linear-gradient(to right, #336b63, #e0f2f1);
-  color: #fff;
-}
+    @keyframes fadeInOnce {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-.why-eleve h2 {
-  font-size: 2.2rem;
-  margin-bottom: 10px;
-}
+    .typewriter {
+      font-size: 18px;
+      color: #e0f7f1;
+      margin-top: 10px;
+      height: 60px;
+      white-space: pre-line;
+      text-align: center;
+      min-height: 2em;
+    }
 
-.why-eleve .subheading {
-  font-size: 1rem;
-  color: #e0f2f1;
-  margin-bottom: 40px;
-}
+    .cursor {
+      display: inline-block;
+      background: #e0f7f1;
+      width: 2px;
+      margin-left: 4px;
+      animation: blink 0.8s steps(1) infinite;
+    }
 
-.features {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 30px;
-  margin-bottom: 40px;
-}
+    @keyframes blink {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
 
-.feature-box {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 20px;
-  border-radius: 12px;
-  width: 220px;
-  backdrop-filter: blur(5px);
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
-}
+    /* === WHY ELEVE SECTION === */
+    .why-eleve {
+      background: linear-gradient(to right, #1b4f4b, #0a1f1e);
+      color: #fff;
+      padding: 80px 20px;
+      min-height: 100vh;
+    }
 
-.feature-box .icon {
-  font-size: 36px;
-  margin-bottom: 10px;
-}
+    .why-eleve h2 {
+      font-size: 2.4rem;
+      margin-bottom: 10px;
+      color: #b2fce4;
+    }
 
-.feature-box h3 {
-  color: #b2fce4;
-  margin-bottom: 5px;
-}
+    .why-eleve .subheading {
+      font-size: 1.1rem;
+      color: #d9f5f2;
+      margin-bottom: 40px;
+    }
 
-.feature-box p {
-  font-size: 0.9rem;
-  color: #e0f2f1;
-}
+    .features {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-bottom: 50px;
+    }
 
-.stats {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 40px;
-  margin-top: 30px;
-  color: #fff;
-  font-size: 1rem;
-}
+    .feature-box {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 25px;
+      border-radius: 12px;
+      width: 240px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+    }
 
-.stats div {
-  line-height: 1.5;
-}
+    .feature-box .icon {
+      font-size: 36px;
+      margin-bottom: 12px;
+    }
+
+    .feature-box h3 {
+      color: #b2fce4;
+      margin-bottom: 5px;
+    }
+
+    .feature-box p {
+      font-size: 0.9rem;
+      color: #d3f7f2;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 50px;
+      font-size: 1rem;
+      color: #f2f2f2;
+    }
+
+    .stats div {
+      line-height: 1.6;
+    }
 
   </style>
 </head>
@@ -167,68 +161,69 @@
   <h1 class="brand-title">Elev&#769;e</h1>
   <p class="tagline">Your personal digital resume builder</p>
   <button class="start-btn" onclick="window.location.href='https://basak-anushka13.github.io/resume-builder/resume.html'">Create Your Resume</button>
+
   <div class="typewriter">
-  <p id="type-text"></p>
-</div>
+    <p id="type-text"></p>
+  </div>
+
   <section class="why-eleve">
-  <h2>Why Choose Eleve?</h2>
-  <p class="subheading">Powerful features designed to make your resume stand out</p>
+    <h2>Why Choose Eleve?</h2>
+    <p class="subheading">Powerful features designed to make your resume stand out</p>
 
-  <div class="features">
-    <div class="feature-box">
-      <div class="icon">🖊️</div>
-      <h3>Easy Builder</h3>
-      <p>Intuitive drag-and-drop interface</p>
+    <div class="features">
+      <div class="feature-box">
+        <div class="icon">🖊️</div>
+        <h3>Easy Builder</h3>
+        <p>Intuitive drag-and-drop interface</p>
+      </div>
+      <div class="feature-box">
+        <div class="icon">📄</div>
+        <h3>ATS Optimized</h3>
+        <p>Beat applicant tracking systems</p>
+      </div>
+      <div class="feature-box">
+        <div class="icon">⬇️</div>
+        <h3>Multiple Formats</h3>
+        <p>Export as PDF, Word, or share online</p>
+      </div>
     </div>
-    <div class="feature-box">
-      <div class="icon">📄</div>
-      <h3>ATS Optimized</h3>
-      <p>Beat applicant tracking systems</p>
+
+    <div class="stats">
+      <div><strong>500K+</strong><br>Resumes Created</div>
+      <div><strong>95%</strong><br>Success Rate</div>
+      <div><strong>4.9★</strong><br>User Rating</div>
+      <div><strong>24/7</strong><br>Support</div>
     </div>
-    <div class="feature-box">
-      <div class="icon">⬇️</div>
-      <h3>Multiple Formats</h3>
-      <p>Export as PDF, Word, or share online</p>
-    </div>
-  </div>
+  </section>
 
-  <div class="stats">
-    <div><strong>500K+</strong><br>Resumes Created</div>
-    <div><strong>95%</strong><br>Success Rate</div>
-    <div><strong>4.9★</strong><br>User Rating</div>
-    <div><strong>24/7</strong><br>Support</div>
-  </div>
-</section>
+  <script>
+    const lines = [
+      "Build a resume that reflects who you are.",
+      "Just focus on your journey—we'll handle the format.",
+      "Professional. Personalized. Powerful."
+    ];
 
-<script>
-const lines = [
-  "Build a resume that reflects who you are.",
-  "Just focus on your journey—we'll handle the format.",
-  "Professional. Personalized. Powerful."
-];
+    const target = document.getElementById("type-text");
+    let lineIndex = 0;
+    let charIndex = 0;
 
-const target = document.getElementById("type-text");
-let lineIndex = 0;
-let charIndex = 0;
-
-function typeLine() {
-  if (lineIndex < lines.length) {
-    if (charIndex <= lines[lineIndex].length) {
-      target.innerHTML = lines.slice(0, lineIndex).join('\n') + '\n' + lines[lineIndex].slice(0, charIndex) + '<span class="cursor"></span>';
-      charIndex++;
-      setTimeout(typeLine, 20); // typing speed
-    } else {
-      charIndex = 0;
-      lineIndex++;
-      setTimeout(typeLine, 300); // pause between lines
+    function typeLine() {
+      if (lineIndex < lines.length) {
+        if (charIndex <= lines[lineIndex].length) {
+          target.innerHTML = lines.slice(0, lineIndex).join('\n') + '\n' + lines[lineIndex].slice(0, charIndex) + '<span class="cursor"></span>';
+          charIndex++;
+          setTimeout(typeLine, 20);
+        } else {
+          charIndex = 0;
+          lineIndex++;
+          setTimeout(typeLine, 300);
+        }
+      } else {
+        target.innerHTML = lines.join('\n');
+      }
     }
-  } else {
-    target.innerHTML = lines.join('\n'); // remove cursor at end
-  }
-}
 
-typeLine();
-</script>
-
+    typeLine();
+  </script>
 </body>
 </html>

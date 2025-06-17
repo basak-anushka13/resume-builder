@@ -95,6 +95,69 @@
     transform: translateY(0);
   }
 }
+.why-eleve {
+  text-align: center;
+  padding: 60px 20px;
+  background: linear-gradient(to right, #336b63, #e0f2f1);
+  color: #fff;
+}
+
+.why-eleve h2 {
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+}
+
+.why-eleve .subheading {
+  font-size: 1rem;
+  color: #e0f2f1;
+  margin-bottom: 40px;
+}
+
+.features {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.feature-box {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 12px;
+  width: 220px;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+}
+
+.feature-box .icon {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.feature-box h3 {
+  color: #b2fce4;
+  margin-bottom: 5px;
+}
+
+.feature-box p {
+  font-size: 0.9rem;
+  color: #e0f2f1;
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-top: 30px;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.stats div {
+  line-height: 1.5;
+}
 
   </style>
 </head>
@@ -107,6 +170,36 @@
   <div class="typewriter">
   <p id="type-text"></p>
 </div>
+  <section class="why-eleve">
+  <h2>Why Choose Eleve?</h2>
+  <p class="subheading">Powerful features designed to make your resume stand out</p>
+
+  <div class="features">
+    <div class="feature-box">
+      <div class="icon">🖊️</div>
+      <h3>Easy Builder</h3>
+      <p>Intuitive drag-and-drop interface</p>
+    </div>
+    <div class="feature-box">
+      <div class="icon">📄</div>
+      <h3>ATS Optimized</h3>
+      <p>Beat applicant tracking systems</p>
+    </div>
+    <div class="feature-box">
+      <div class="icon">⬇️</div>
+      <h3>Multiple Formats</h3>
+      <p>Export as PDF, Word, or share online</p>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div><strong>500K+</strong><br>Resumes Created</div>
+    <div><strong>95%</strong><br>Success Rate</div>
+    <div><strong>4.9★</strong><br>User Rating</div>
+    <div><strong>24/7</strong><br>Support</div>
+  </div>
+</section>
+
 <script>
 const lines = [
   "Build a resume that reflects who you are.",

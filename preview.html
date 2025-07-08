@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Resume Preview | Élevé</title>
+  <title>Resume Preview | Elev́e</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -24,6 +24,9 @@
     .section {
       margin-bottom: 30px;
     }
+    ul {
+      padding-left: 20px;
+    }
     #download-btn {
       background: #145a32;
       color: white;
@@ -42,7 +45,11 @@
 <body>
   <div class="resume-container" id="resume-content">
     <h1 id="preview-name">Your Name</h1>
-    <p id="preview-email">Email</p>
+    <p id="preview-location"></p>
+    <p id="preview-email"></p>
+    <p id="preview-phone"></p>
+    <p id="preview-links"></p>
+    <p id="preview-description"></p>
 
     <div class="section">
       <h2>Skills</h2>
@@ -50,11 +57,24 @@
     </div>
 
     <div class="section">
+      <h2>Education</h2>
+      <div id="preview-education"></div>
+    </div>
+
+    <div class="section">
       <h2>Experience</h2>
       <div id="preview-experience"></div>
     </div>
 
-    <!-- You can add more sections here if needed -->
+    <div class="section">
+      <h2>Certificates</h2>
+      <div id="preview-certificates"></div>
+    </div>
+
+    <div class="section">
+      <h2>Projects</h2>
+      <div id="preview-projects"></div>
+    </div>
   </div>
 
   <button id="download-btn">Download Resume (PDF)</button>
@@ -65,34 +85,64 @@
 
     if (data) {
       document.getElementById("preview-name").innerText = data.name || "";
+      document.getElementById("preview-location").innerText = data.location || "";
       document.getElementById("preview-email").innerText = data.email || "";
+      document.getElementById("preview-phone").innerText = data.phone || "";
+      document.getElementById("preview-description").innerText = data.description || "";
+
+      const links = [];
+      if (data.linkedin) links.push(`<a href="${data.linkedin}" target="_blank">LinkedIn</a>`);
+      if (data.portfolio) links.push(`<a href="${data.portfolio}" target="_blank">Portfolio</a>`);
+      document.getElementById("preview-links").innerHTML = links.join(" ⋄ ");
 
       // Skills
       const skillList = document.getElementById("preview-skills");
-      if (Array.isArray(data.skills)) {
-        data.skills.forEach(skill => {
-          const li = document.createElement("li");
-          li.innerText = skill;
-          skillList.appendChild(li);
-        });
-      }
+      data.skills?.forEach(skill => {
+        const li = document.createElement("li");
+        li.textContent = skill;
+        skillList.appendChild(li);
+      });
+
+      // Education
+      const eduSection = document.getElementById("preview-education");
+      data.education?.forEach(edu => {
+        const div = document.createElement("div");
+        div.innerHTML = `<strong>${edu.degree}</strong> at ${edu.institution} (${edu.year})<br>Marks: ${edu.marks}<br><br>`;
+        eduSection.appendChild(div);
+      });
 
       // Experience
-      const expContainer = document.getElementById("preview-experience");
-      if (Array.isArray(data.experience)) {
-        data.experience.forEach(exp => {
-          const block = document.createElement("div");
-          block.innerHTML = `
-            <h3>${exp.title}</h3>
-            <p><strong>${exp.company}</strong> (${exp.duration})</p>
-            <p>${exp.description}</p>
+      const expSection = document.getElementById("preview-experience");
+      data.experience?.forEach(exp => {
+        const div = document.createElement("div");
+        div.innerHTML = `<strong>${exp.title}</strong> at ${exp.company} (${exp.duration})<br>${exp.description}<br><br>`;
+        expSection.appendChild(div);
+      });
+
+      // Certificates
+      const certSection = document.getElementById("preview-certificates");
+      data.certificates?.forEach(cert => {
+        const div = document.createElement("div");
+        div.innerHTML = `<strong>${cert.title}</strong> from ${cert.org} (${cert.date})<br><br>`;
+        certSection.appendChild(div);
+      });
+
+      // Projects
+      const projSection = document.getElementById("preview-projects");
+      data.projects?.forEach(proj => {
+        if (proj.name || proj.desc || proj.link) {
+          const div = document.createElement("div");
+          div.innerHTML = `
+            <strong>${proj.name}</strong><br>
+            ${proj.desc}<br>
+            ${proj.link ? `<a href="${proj.link}" target="_blank">${proj.link}</a><br>` : ""}
+            <br>
           `;
-          expContainer.appendChild(block);
-        });
-      }
+          projSection.appendChild(div);
+        }
+      });
     }
 
-    // Better PDF download (works on mobile too)
     document.getElementById("download-btn").addEventListener("click", () => {
       const element = document.getElementById("resume-content");
       setTimeout(() => {
@@ -106,7 +156,7 @@
           },
           jsPDF: { unit: "in", format: "a4", orientation: "portrait" }
         }).save();
-      }, 500); // wait for fonts/images to load
+      }, 300);
     });
   </script>
 </body>

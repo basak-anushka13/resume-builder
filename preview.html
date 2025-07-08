@@ -2,183 +2,194 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Resume Preview | Élevé</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Resume Preview</title>
   <style>
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
+
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #fff;
-      color: #000;
-      margin: 0;
       padding: 20px;
+      background: #f0f0f0;
     }
+
     .resume-container {
       max-width: 800px;
       margin: auto;
-      padding: 40px;
       background: white;
-      border: 1px solid #000;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      color: #000;
     }
 
     h1, h2, h3 {
-      margin: 10px 0 5px;
-      font-weight: 600;
+      margin-bottom: 10px;
     }
+
     .section {
       margin-top: 30px;
     }
 
-    .section ul {
+    ul {
       padding-left: 20px;
-    }
-
-    .contact-info, .location {
-      font-size: 14px;
-      margin-top: 5px;
-    }
-
-    .divider {
-      border-top: 1px solid #000;
-      margin: 20px 0;
+      margin-top: 10px;
     }
 
     #download-btn {
       display: block;
-      margin: 30px auto;
+      margin: 30px auto 0;
       padding: 12px 24px;
       font-size: 16px;
-      background: #00a87d;
+      background: black;
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 5px;
       cursor: pointer;
-      transition: background 0.3s ease;
     }
 
-    #download-btn:hover {
-      background: #008a65;
+    a {
+      color: black;
+      text-decoration: underline;
     }
 
-    @media print {
-      #download-btn {
-        display: none;
-      }
+    .contact {
+      margin-top: 5px;
+      font-size: 14px;
+    }
+
+    .line {
+      margin: 8px 0;
     }
   </style>
 </head>
 <body>
 
-<div class="resume-container" id="resume-content">
-  <h1 id="preview-name">Your Name</h1>
-  <div class="location" id="preview-location">Location</div>
-  <div class="contact-info" id="preview-contact">Email | Phone | LinkedIn | Portfolio</div>
-  <div class="section" id="preview-description"></div>
+  <div class="resume-container" id="resume-content">
+    <h1 id="name">Your Name</h1>
+    <div class="contact" id="contact"></div>
+    <div class="line" id="location"></div>
+    <div class="line" id="description"></div>
 
-  <div class="divider"></div>
+    <div class="section" id="skills-section">
+      <h2>Skills</h2>
+      <ul id="skills-list"></ul>
+    </div>
 
-  <div class="section">
-    <h2>Skills</h2>
-    <ul id="preview-skills"></ul>
+    <div class="section" id="education-section">
+      <h2>Education</h2>
+    </div>
+
+    <div class="section" id="projects-section">
+      <h2>Projects</h2>
+    </div>
+
+    <div class="section" id="certificates-section">
+      <h2>Certificates</h2>
+    </div>
+
+    <div class="section" id="experience-section">
+      <h2>Experience</h2>
+    </div>
   </div>
 
-  <div class="section">
-    <h2>Education</h2>
-    <div id="preview-education"></div>
-  </div>
+  <button id="download-btn">Download Resume (PDF)</button>
 
-  <div class="section">
-    <h2>Projects</h2>
-    <div id="preview-projects"></div>
-  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script>
+    const data = JSON.parse(localStorage.getItem("resumeData"));
 
-  <div class="section">
-    <h2>Certificates</h2>
-    <div id="preview-certificates"></div>
-  </div>
+    if (data) {
+      // Basic Info
+      document.getElementById("name").textContent = data.name || "";
+      document.getElementById("location").textContent = data.location || "";
+      document.getElementById("description").textContent = data.description || "";
 
-  <div class="section">
-    <h2>Experience</h2>
-    <div id="preview-experience"></div>
-  </div>
-</div>
+      const contact = [];
+      if (data.email) contact.push(`<a href="mailto:${data.email}">${data.email}</a>`);
+      if (data.phone) contact.push(data.phone);
+      if (data.linkedin) contact.push(`<a href="${data.linkedin}" target="_blank">LinkedIn</a>`);
+      if (data.portfolio) contact.push(`<a href="${data.portfolio}" target="_blank">Portfolio</a>`);
+      document.getElementById("contact").innerHTML = contact.join(" ⋄ ");
 
-<button id="download-btn">Download Resume (PDF)</button>
+      // Skills
+      if (data.skills && data.skills.length > 0) {
+        const list = document.getElementById("skills-list");
+        data.skills.forEach(skill => {
+          const li = document.createElement("li");
+          li.textContent = skill;
+          list.appendChild(li);
+        });
+      } else {
+        document.getElementById("skills-section").style.display = "none";
+      }
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script>
-  const data = JSON.parse(localStorage.getItem("resumeData"));
-  if (!data) return;
+      // Education
+      if (data.education?.length) {
+        const section = document.getElementById("education-section");
+        data.education.forEach(ed => {
+          const div = document.createElement("div");
+          div.innerHTML = `<strong>${ed.degree}</strong> - ${ed.institution} (${ed.year})<br>Marks: ${ed.marks}<br><br>`;
+          section.appendChild(div);
+        });
+      } else {
+        document.getElementById("education-section").style.display = "none";
+      }
 
-  document.getElementById("preview-name").textContent = data.name || "";
-  document.getElementById("preview-location").textContent = data.location || "";
+      // Projects
+      if (data.projects?.length) {
+        const section = document.getElementById("projects-section");
+        data.projects.forEach(p => {
+          if (p.name || p.desc || p.link) {
+            const div = document.createElement("div");
+            div.innerHTML = `<strong>${p.name}</strong><br>${p.desc}<br>${p.link ? `<a href="${p.link}" target="_blank">${p.link}</a>` : ""}<br><br>`;
+            section.appendChild(div);
+          }
+        });
+      } else {
+        document.getElementById("projects-section").style.display = "none";
+      }
 
-  const contact = [];
-  if (data.email) contact.push(data.email);
-  if (data.phone) contact.push(data.phone);
-  if (data.linkedin) contact.push(data.linkedin);
-  if (data.portfolio) contact.push(data.portfolio);
-  document.getElementById("preview-contact").textContent = contact.join(" | ");
+      // Certificates
+      if (data.certificates?.length) {
+        const section = document.getElementById("certificates-section");
+        data.certificates.forEach(c => {
+          const div = document.createElement("div");
+          div.innerHTML = `<strong>${c.title}</strong> - ${c.org} (${c.date})<br><br>`;
+          section.appendChild(div);
+        });
+      } else {
+        document.getElementById("certificates-section").style.display = "none";
+      }
 
-  document.getElementById("preview-description").textContent = data.description || "";
-
-  const skillList = document.getElementById("preview-skills");
-  data.skills?.forEach(skill => {
-    const li = document.createElement("li");
-    li.textContent = skill;
-    skillList.appendChild(li);
-  });
-
-  const eduContainer = document.getElementById("preview-education");
-  data.education?.forEach(e => {
-    const div = document.createElement("div");
-    div.innerHTML = `
-      <strong>${e.degree}</strong><br>
-      ${e.institution} (${e.year})<br>
-      Marks: ${e.marks}<br><br>
-    `;
-    eduContainer.appendChild(div);
-  });
-
-  const projContainer = document.getElementById("preview-projects");
-  data.projects?.forEach(p => {
-    if (p.name || p.desc || p.link) {
-      const div = document.createElement("div");
-      div.innerHTML = `
-        <strong>${p.name}</strong><br>
-        ${p.desc}<br>
-        ${p.link ? `<a href="${p.link}" target="_blank">${p.link}</a>` : ""}<br><br>
-      `;
-      projContainer.appendChild(div);
+      // Experience
+      if (data.experience?.length) {
+        const section = document.getElementById("experience-section");
+        data.experience.forEach(e => {
+          const div = document.createElement("div");
+          div.innerHTML = `<strong>${e.title}</strong> - ${e.company} (${e.duration})<br>${e.description}<br><br>`;
+          section.appendChild(div);
+        });
+      } else {
+        document.getElementById("experience-section").style.display = "none";
+      }
     }
-  });
 
-  const certContainer = document.getElementById("preview-certificates");
-  data.certificates?.forEach(c => {
-    const div = document.createElement("div");
-    div.innerHTML = `<strong>${c.title}</strong> from ${c.org} (${c.date})<br><br>`;
-    certContainer.appendChild(div);
-  });
-
-  const expContainer = document.getElementById("preview-experience");
-  data.experience?.forEach(e => {
-    const div = document.createElement("div");
-    div.innerHTML = `<strong>${e.title}</strong> at ${e.company} (${e.duration})<br>${e.description}<br><br>`;
-    expContainer.appendChild(div);
-  });
-
-  document.getElementById("download-btn").addEventListener("click", () => {
-    html2pdf().from(document.getElementById("resume-content")).set({
-      margin: 0.5,
-      filename: "Eleve_Resume.pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: "in", format: "a4", orientation: "portrait" }
-    }).save();
-  });
-</script>
-
+    // PDF Download
+    document.getElementById("download-btn").addEventListener("click", () => {
+      const element = document.getElementById("resume-content");
+      html2pdf().from(element).set({
+        margin: 0.5,
+        filename: 'Eleve_Resume.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      }).save();
+    });
+  </script>
 </body>
 </html>

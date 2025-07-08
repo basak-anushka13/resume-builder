@@ -34,9 +34,34 @@
 
     .tagline {
       font-size: 24px;
-      color: #004a3b;
+      color: #cce8df;
       margin: 10px 0 30px;
     }
+.sample-previews {
+  text-align: center;
+  margin-top: 40px;
+  margin-bottom: 60px;
+}
+
+.sample-images {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.sample-images img {
+  max-width: 300px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+}
+
+.sample-images img:hover {
+  transform: scale(1.05);
+}
 
     .start-btn {
       padding: 14px 28px;
@@ -67,7 +92,7 @@
 
     .typewriter {
       font-size: 18px;
-      color: #004a3b;
+      color: #e0f7f1;
       margin: 0 auto 40px; 
       height: auto;
   min-height: 2em;
@@ -169,16 +194,16 @@
   color: #c8f5e7;
 }
 .footer {
-  background: #004a3b;
+  background: #053c01;
   color: #cce8df;
   text-align: center;
-  padding: 6px 3px;
+  padding: 20px 10px;
   font-size: 14px;
 }
 
 .footer a {
   color: #a1f3d1;
-  margin: 0 6px;
+  margin: 0 12px;
   text-decoration: none;
   transition: color 0.3s;
 }
@@ -188,7 +213,7 @@
 }
 
 .footer-content {
-  max-width: 600px;
+  max-width: 800px;
   margin: auto;
 }
 
@@ -204,6 +229,13 @@
   <h1 class="brand-title">Elev&#769;e</h1>
   <p class="tagline">Your personal digital resume builder</p>
   <button class="start-btn" onclick="window.location.href='https://basak-anushka13.github.io/resume-builder/resume.html'">Create Your Resume</button>
+<div class="sample-previews">
+  <h2 style="color: #145a32;">Sample Resume Previews</h2>
+  <div class="sample-images">
+    <img src="img1.webp" alt="Sample Resume 1">
+    <img src="img2.png" alt="Sample Resume 2">
+  </div>
+</div>
 
   <div class="typewriter">
     <p id="type-text"></p>
@@ -239,11 +271,11 @@
     </div>
 <div class="cta-text">
   <h2>Ready to Build Your Future?</h2>
-  <p>Join thousands who've landed their dream jobs with Elev&#769;e</p>
+  <p>Join thousands who've landed their dream jobs with Eleve</p>
   </section>
 <footer class="footer">
   <div class="footer-content">
-    <p>© 2025 Elev&#769;e. All rights reserved.</p>
+    <p>© 2025 Élevé. All rights reserved.</p>
     <div class="footer-links">
       <a href="#">Privacy Policy</a>
       <a href="#">Terms of Use</a>

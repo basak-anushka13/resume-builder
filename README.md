@@ -18,7 +18,7 @@
 
 ## How to Use
 
-1. Open `welcome.html` in your browser
+1. Open `index.html` in your browser
 2. Click on the **Create Your Resume** button
 3. Fill out the form
 4. Click **Generate Resume**

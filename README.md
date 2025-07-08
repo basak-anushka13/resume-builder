@@ -1,6 +1,6 @@
-# Élevé – Resume Builder
+# Elev́e – Resume Builder
 
-Élevé is a simple web app that helps users create professional-looking resumes quickly. It’s designed especially for students and beginners who want a clean resume without spending hours formatting.
+Elev́e is a simple web app that helps users create professional-looking resumes quickly. It’s designed especially for students and beginners who want a clean resume without spending hours formatting.
 
 ---
 
@@ -9,7 +9,6 @@
 - Fill out personal, educational, and work experience details
 - Add multiple entries for education, projects, certificates, and experience
 - Add skill tags easily
-- Upload profile picture and related files (PDF, JPG, PNG)
 - See a live preview of your resume
 - Download your resume as a PDF
 - Includes a welcome page with animated text
